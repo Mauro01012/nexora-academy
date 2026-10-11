@@ -9,9 +9,28 @@ import type { LinkTarget, RouteId } from '@/app/routes';
  */
 let pendingSection: string | null = null;
 
-function readPath(): string {
+export function readPath(): string {
   const raw = window.location.hash.replace(/^#/, '').split('?')[0];
   return raw && raw.startsWith('/') ? raw : '/';
+}
+
+/** Parâmetros após o "?" do hash atual (ex.: #/cursos?q=react). */
+export function readQuery(): URLSearchParams {
+  const hash = window.location.hash.replace(/^#/, '');
+  const index = hash.indexOf('?');
+  return new URLSearchParams(index >= 0 ? hash.slice(index + 1) : '');
+}
+
+/** Troca só os parâmetros do endereço atual, sem criar nova entrada no histórico e sem rolar a página. */
+export function replaceQuery(params: URLSearchParams): void {
+  const query = params.toString();
+  const next = `#${readPath()}${query ? `?${query}` : ''}`;
+  if (window.location.hash === next) return;
+  try {
+    window.history.replaceState(window.history.state, '', next);
+  } catch {
+    /* alguns navegadores limitam chamadas seguidas; o estado em memória continua correto */
+  }
 }
 
 function subscribe(callback: () => void): () => void {

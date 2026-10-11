@@ -32,7 +32,7 @@ src/
 ## Catálogo de cursos (Etapa 2A)
 
 A rota `#/cursos` exibe o catálogo: cabeçalho da página e grade responsiva de cartões (1, 2 ou 3 colunas conforme a largura).
-Busca, filtros, página de detalhes, login e painéis ficam para as próximas etapas.
+Busca, filtros e página de detalhes foram entregues na etapa 2B (abaixo). Login e painéis ficam para as próximas etapas.
 
 - **Dados:** `src/data/courses.ts` (12 cursos fictícios, 2 por categoria). O tipo `Course` está em `src/types/index.ts`; `price` é
   opcional e, quando ausente, o curso é exibido como "Gratuito".
@@ -40,6 +40,20 @@ Busca, filtros, página de detalhes, login e painéis ficam para as próximas et
   `ButtonLink`, `CourseCover`, `Icon`, `Rating` e o `Reveal`; os estilos ficam em `styles/catalog.css`.
 - **Utilitários:** `utils/course.ts` (formatação de preço e números, padrão da capa por categoria).
 - **Página inicial:** continua usando as seis primeiras posições de `courses` (`homeShowcase`). Novos cursos devem entrar depois delas.
+
+## Busca, filtros e detalhes (Etapa 2B)
+
+- **Busca** (`utils/catalog.ts`): ignora maiúsculas e acentos; todos os termos digitados precisam aparecer em algum destes campos:
+  título, resumo, tags, categoria, nível, nome da instrutoria ou "gratuito".
+- **Filtros** por categoria e nível, sempre combinados (E) com a busca. O número em cada opção respeita a busca e o outro filtro;
+  opções sem resultado ficam desativadas.
+- **Ordenação:** destaques (ordem dos dados), nome (A–Z), menor/maior preço (curso gratuito vale 0), melhor avaliação e mais alunos.
+  Empates são desfeitos pelo título.
+- **Endereço compartilhável:** o estado vai para o hash, ex.: `#/cursos?q=python&categoria=dados&nivel=iniciante&ordem=menor-preco`.
+  Valores inválidos são ignorados. Os cards de categoria da página inicial já abrem o catálogo filtrado.
+- **Detalhes:** `#/cursos/:slug` (`pages/CourseDetail.tsx`) com resumo, temas, instrutoria, painel de valor, cursos relacionados
+  e "Voltar ao catálogo", que preserva a busca. Slug inexistente mostra "Curso não encontrado".
+- A matrícula aparece desativada ("Matrícula em breve"): depende das contas de aluno, que não fazem parte desta etapa.
 
 ## Personalização da marca
 

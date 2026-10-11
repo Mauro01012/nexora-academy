@@ -1,10 +1,57 @@
+import { useEffect, useMemo, useState } from 'react';
+import { readPath, readQuery, replaceQuery } from '@/app/router';
+import { CatalogFilters } from '@/components/courses/CatalogFilters';
 import { CourseCard } from '@/components/courses/CourseCard';
+import { Button } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Reveal } from '@/hooks/useReveal';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { categories } from '@/data/categories';
 import { courses } from '@/data/courses';
+import {
+  defaultFilters,
+  filtersFromParams,
+  filtersToParams,
+  hasActiveFilters,
+  queryCourses,
+  rememberCatalogQuery,
+  sameFilters,
+} from '@/utils/catalog';
+import type { CatalogFilters as Filters } from '@/utils/catalog';
 
-/** Estrutura inicial do catálogo: lista completa de cursos. Busca e filtros ficam para as próximas etapas. */
+const categoryIds = categories.map((c) => c.id as string);
+const readFilters = (): Filters => filtersFromParams(readQuery(), categoryIds);
+
+/** Catálogo: busca, filtros e ordenação combinados. O estado fica no endereço (#/cursos?q=...) e pode ser compartilhado. */
 export function Courses() {
+  useDocumentTitle('Catálogo de cursos');
+  const [filters, setFilters] = useState<Filters>(readFilters);
+
+  // Links com filtros e os botões voltar/avançar do navegador alteram o endereço sem remontar a página.
+  useEffect(() => {
+    const onHashChange = () => {
+      if (readPath() !== '/cursos') return;
+      const next = readFilters();
+      setFilters((current) => (sameFilters(current, next) ? current : next));
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  // Estado -> endereço. A gravação espera a pessoa parar de digitar para não encher o histórico de chamadas.
+  useEffect(() => {
+    const params = filtersToParams(filters);
+    rememberCatalogQuery(params.toString());
+    const timer = window.setTimeout(() => replaceQuery(params), 200);
+    return () => window.clearTimeout(timer);
+  }, [filters]);
+
+  const change = (patch: Partial<Filters>) => setFilters((current) => ({ ...current, ...patch }));
+  const clear = () => setFilters((current) => ({ ...defaultFilters, sort: current.sort }));
+
+  const results = useMemo(() => queryCourses(courses, filters), [filters]);
+  const filtered = hasActiveFilters(filters);
+
   const areas = new Set(courses.map((c) => c.category)).size;
   const levels = new Set(courses.map((c) => c.level)).size;
 
@@ -45,23 +92,45 @@ export function Courses() {
           <h2 id="catalogo-lista-title" className="visually-hidden">
             Lista de cursos
           </h2>
-          <p className="catalog__count">
-            {courses.length} cursos <span>nesta amostra do catálogo</span>
+
+          <CatalogFilters filters={filters} onChange={change} onClear={clear} />
+
+          <p className="catalog__count" role="status">
+            {filtered ? `${results.length} de ${courses.length} cursos` : `${courses.length} cursos`}
+            <span> {filtered ? 'encontrados' : 'nesta amostra do catálogo'}</span>
           </p>
 
-          <ul className="catalog__grid">
-            {courses.map((course, index) => (
-              <li key={course.id}>
-                <Reveal className="catalog__item" delay={(index % 3) * 80}>
-                  <CourseCard course={course} />
-                </Reveal>
-              </li>
-            ))}
-          </ul>
+          {results.length > 0 ? (
+            <ul className="catalog__grid">
+              {results.map((course, index) => (
+                <li key={course.id}>
+                  <Reveal className="catalog__item" delay={(index % 3) * 80}>
+                    <CourseCard course={course} />
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="catalog-empty">
+              <span className="catalog-empty__icon" aria-hidden="true">
+                <Icon name="compass" size={28} />
+              </span>
+              <h3 className="display catalog-empty__title">Nenhum curso encontrado</h3>
+              <p className="catalog-empty__text">
+                {filters.q.trim()
+                  ? `Não há cursos para “${filters.q.trim()}” com os filtros escolhidos.`
+                  : 'Nenhum curso combina com os filtros escolhidos.'}{' '}
+                Tente outro termo, remova um filtro ou volte à lista completa.
+              </p>
+              <Button variant="primary" onClick={clear}>
+                Limpar busca e filtros
+              </Button>
+            </div>
+          )}
 
           <p className="demo-note">
-            Cursos, instrutores, preços e números são fictícios. Esta é uma amostra: o catálogo completo e a busca chegam
-            nas próximas etapas.
+            Cursos, instrutores, preços e números são fictícios. Esta é uma amostra do catálogo, criada apenas para a
+            demonstração.
           </p>
         </div>
       </section>

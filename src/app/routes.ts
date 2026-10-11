@@ -31,7 +31,7 @@ export const routes: RouteDef[] = [
     path: '/cursos/:slug',
     title: 'Página do curso',
     description: 'Detalhes do curso, conteúdo programático, instrutor e matrícula.',
-    implemented: false,
+    implemented: true,
   },
   { id: 'login', path: '/entrar', title: 'Entrar', description: 'Acesso à conta do aluno.', implemented: false },
   { id: 'signup', path: '/cadastro', title: 'Criar conta', description: 'Cadastro de novos alunos.', implemented: false },

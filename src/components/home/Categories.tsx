@@ -18,7 +18,7 @@ export function Categories() {
           <ul>
             {categories.map((category, index) => (
               <li key={category.id}>
-                <AppLink to="/cursos" className="category-row" data-tone={category.tone}>
+                <AppLink to={`/cursos?categoria=${category.id}`} className="category-row" data-tone={category.tone}>
                   <span className="category-row__index" aria-hidden="true">
                     {String(index + 1).padStart(2, '0')}
                   </span>

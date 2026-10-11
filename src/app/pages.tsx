@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import type { RouteId } from '@/app/routes';
+import { CourseDetail } from '@/pages/CourseDetail';
 import { Courses } from '@/pages/Courses';
 import { Home } from '@/pages/Home';
 
@@ -11,4 +12,5 @@ import { Home } from '@/pages/Home';
 export const pages: Partial<Record<RouteId, ComponentType<{ params: Record<string, string> }>>> = {
   home: Home,
   courses: Courses,
+  course: CourseDetail,
 };

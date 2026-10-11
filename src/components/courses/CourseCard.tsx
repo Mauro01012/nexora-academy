@@ -9,7 +9,7 @@ import { instructorById } from '@/data/instructors';
 import { coverPatternFor, formatNumber, formatPrice, levelRank } from '@/utils/course';
 import type { Course } from '@/types';
 
-function LevelMeter({ level }: { level: Course['level'] }) {
+export function LevelMeter({ level }: { level: Course['level'] }) {
   const rank = levelRank[level];
   return (
     <span className="level-meter">
