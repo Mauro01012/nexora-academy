@@ -3,7 +3,7 @@
  * Para ativar uma área nas próximas etapas: (1) crie a página, (2) registre-a em
  * `src/app/pages.tsx` e (3) troque `implemented` para `true`. Nenhum link precisa mudar.
  */
-export type RouteId = 'home' | 'courses' | 'course' | 'login' | 'signup' | 'student' | 'admin';
+export type RouteId = 'home' | 'courses' | 'course' | 'enroll' | 'login' | 'signup' | 'logout' | 'student' | 'admin';
 
 export interface RouteDef {
   id: RouteId;
@@ -33,14 +33,22 @@ export const routes: RouteDef[] = [
     description: 'Detalhes do curso, conteúdo programático, instrutor e matrícula.',
     implemented: true,
   },
-  { id: 'login', path: '/entrar', title: 'Entrar', description: 'Acesso à conta do aluno.', implemented: false },
-  { id: 'signup', path: '/cadastro', title: 'Criar conta', description: 'Cadastro de novos alunos.', implemented: false },
+  {
+    id: 'enroll',
+    path: '/cursos/:slug/inscricao',
+    title: 'Inscrição no curso',
+    description: 'Inscrição demonstrativa em um curso (sem pagamento).',
+    implemented: true,
+  },
+  { id: 'login', path: '/entrar', title: 'Entrar', description: 'Acesso à conta demonstrativa do aluno.', implemented: true },
+  { id: 'signup', path: '/cadastro', title: 'Criar conta', description: 'Cadastro demonstrativo de alunos.', implemented: true },
+  { id: 'logout', path: '/sair', title: 'Sair da conta', description: 'Encerramento da sessão demonstrativa.', implemented: true },
   {
     id: 'student',
     path: '/aluno',
     title: 'Área do aluno',
-    description: 'Cursos em andamento, progresso, certificados e perfil.',
-    implemented: false,
+    description: 'Resumo da conta, cursos inscritos e progresso demonstrativo.',
+    implemented: true,
   },
   {
     id: 'admin',

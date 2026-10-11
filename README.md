@@ -55,6 +55,21 @@ Busca, filtros e página de detalhes foram entregues na etapa 2B (abaixo). Login
   e "Voltar ao catálogo", que preserva a busca. Slug inexistente mostra "Curso não encontrado".
 - A matrícula aparece desativada ("Matrícula em breve"): depende das contas de aluno, que não fazem parte desta etapa.
 
+## Conta e área do aluno (Etapa 3A)
+
+Fluxo de autenticação **simulado**, só no navegador. Não há servidor, token, pagamento nem segurança de produção.
+
+- **Telas:** `#/cadastro`, `#/entrar`, `#/sair` (confirmação), `#/aluno` (resumo, cursos inscritos e progresso fictício) e
+  `#/cursos/:slug/inscricao` (inscrição demonstrativa, sem cobrança). A conta de exemplo é `demo@nexora.example`.
+- **Validação:** nome (2 a 60 caracteres), e-mail em formato válido, senha de 8 a 128 caracteres, confirmação igual e aceite do aviso
+  de demonstração. Os erros aparecem por campo e o foco vai ao primeiro inválido.
+- **Dados guardados** (`localStorage`, chave `nexora.demo.v1`, em `services/demoStore.ts`): nome, e-mail digitado, data de criação,
+  inscrições e contagem de aulas. A senha é validada só quanto ao formato e descartada: nunca é guardada nem enviada.
+  O login confere apenas se o e-mail pertence a uma conta criada neste navegador.
+- **Proteção de rotas:** `RequireAuth` não renderiza `#/aluno` nem a inscrição sem sessão e leva ao login, que devolve ao destino
+  (`?next=`, aceito só para caminhos internos conhecidos). É uma barreira de interface, não proteção de dados.
+- **Apagar dados:** em `#/sair`, a opção "apagar também os dados" remove tudo o que a demonstração guardou.
+
 ## Personalização da marca
 
 Edite `src/config/brand.ts`. As cores viram variáveis CSS (`--color-*`) em tempo de execução por `applyBrandTheme()`;

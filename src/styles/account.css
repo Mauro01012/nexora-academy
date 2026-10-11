@@ -1,0 +1,66 @@
+/* ---------- Conta, inscrição e área do aluno ---------- */
+.auth { padding-block: var(--space-8); }
+.auth__inner { display: grid; justify-items: center; }
+.auth__inner--wide .card { max-width: 860px; }
+.auth__panel { display: grid; gap: var(--space-4); width: 100%; max-width: 520px; padding: var(--space-6); border-radius: var(--radius-xl); }
+.auth__title { font-size: var(--text-2xl); }
+.auth__intro { color: var(--text-muted); }
+.auth-form { display: grid; gap: var(--space-4); }
+.auth__alt { font-size: var(--text-sm); color: var(--text-muted); }
+.auth__alt a { color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
+.auth-sample { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: 1px solid var(--border-soft); font-size: var(--text-sm); color: var(--text-muted); }
+.auth-sample code { font-size: 0.9em; color: var(--text); }
+
+.demo-callout { display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-4); font-size: var(--text-sm); background: color-mix(in srgb, var(--color-amber-400) 18%, transparent); border: 1px solid color-mix(in srgb, var(--color-amber-400) 55%, transparent); border-radius: var(--radius-md); }
+.demo-callout svg { flex: none; margin-top: 2px; }
+.form-summary { padding: var(--space-3) var(--space-4); font-size: var(--text-sm); font-weight: 600; color: var(--color-accent-600); border: 1.5px solid var(--color-accent-600); border-radius: var(--radius-md); }
+
+.check { display: flex; align-items: flex-start; gap: var(--space-3); font-size: var(--text-sm); }
+.check input { flex: none; width: 20px; height: 20px; margin-top: 2px; accent-color: var(--color-primary-600); }
+.check input:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.check--error label { color: var(--color-accent-600); }
+
+.enroll { display: grid; grid-template-columns: 260px minmax(0, 1fr); padding: 0; overflow: hidden; border-radius: var(--radius-xl); width: 100%; }
+.enroll__cover { width: 100%; height: 100%; min-height: 200px; }
+.enroll__body { display: grid; align-content: start; gap: var(--space-4); padding: var(--space-6); justify-items: start; }
+.enroll__title { font-size: var(--text-2xl); }
+.enroll__course { color: var(--text-muted); font-weight: 600; }
+.enroll__body .course-facts, .enroll__body .demo-callout { width: 100%; }
+.course-buy__status { display: flex; align-items: center; gap: var(--space-2); font-weight: 600; color: var(--color-mint-600); }
+
+.progress { height: 8px; overflow: hidden; background: var(--border-soft); border-radius: var(--radius-pill); }
+.progress__fill { display: block; height: 100%; background: var(--color-primary-600); border-radius: inherit; transition: width var(--dur) var(--ease); }
+.progress__fill--done { background: var(--color-mint-600); }
+
+.student__layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: var(--space-6); align-items: start; }
+.student__summary { display: grid; gap: var(--space-4); padding: var(--space-5); border-radius: var(--radius-xl); }
+.student__heading { font-size: var(--text-xl); }
+.student__email { overflow-wrap: anywhere; }
+.student__main { display: grid; gap: var(--space-5); min-width: 0; }
+.student__stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: var(--space-3); }
+.student__stats li { display: grid; gap: 2px; padding: var(--space-4); background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); }
+.student__stats strong { font-family: var(--font-display); font-size: var(--text-xl); }
+.student__stats span { font-size: var(--text-xs); color: var(--text-muted); }
+.student__courses { display: grid; gap: var(--space-4); }
+.student__more { margin-top: var(--space-8); display: grid; gap: var(--space-5); }
+
+.enrolled { display: grid; grid-template-columns: 180px minmax(0, 1fr); padding: 0; overflow: hidden; border-radius: var(--radius-xl); }
+.enrolled__cover { width: 100%; height: 100%; min-height: 150px; }
+.enrolled__body { display: grid; gap: var(--space-3); padding: var(--space-5); justify-items: start; }
+.enrolled__body .progress { width: 100%; }
+.enrolled__title { font-size: var(--text-lg); line-height: var(--leading-snug); }
+.enrolled__title a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.enrolled__progress { font-size: var(--text-sm); color: var(--text-muted); }
+.enrolled__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.enrolled__actions .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+@media (max-width: 899px) {
+  .student__layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 639px) {
+  .auth { padding-block: var(--space-6); }
+  .auth__panel { padding: var(--space-5); }
+  .enroll, .enrolled { grid-template-columns: minmax(0, 1fr); }
+  .enroll__cover, .enrolled__cover { height: 120px; min-height: 0; }
+  .enroll__body { padding: var(--space-5); }
+}

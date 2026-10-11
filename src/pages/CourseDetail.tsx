@@ -1,7 +1,7 @@
 import { AppLink } from '@/app/router';
 import { CourseCard, LevelMeter } from '@/components/courses/CourseCard';
 import { Badge } from '@/components/ui/Badge';
-import { Button, ButtonLink } from '@/components/ui/Button';
+import { ButtonLink } from '@/components/ui/Button';
 import { CourseCover } from '@/components/ui/CourseCover';
 import { Icon } from '@/components/ui/Icon';
 import { Rating } from '@/components/ui/Rating';
@@ -9,6 +9,7 @@ import { categoryById } from '@/data/categories';
 import { courses } from '@/data/courses';
 import { instructorById } from '@/data/instructors';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { useAuth } from '@/hooks/useAuth';
 import { catalogHref } from '@/utils/catalog';
 import { coverPatternFor, formatNumber, formatPrice } from '@/utils/course';
 import type { Course } from '@/types';
@@ -24,7 +25,7 @@ function relatedCourses(course: Course): Course[] {
     .map(({ c }) => c);
 }
 
-function CourseNotFound({ slug }: { slug: string }) {
+export function CourseNotFound({ slug }: { slug: string }) {
   return (
     <section className="page-notice surface-light" aria-labelledby="notice-title">
       <div className="container page-notice__inner">
@@ -60,6 +61,7 @@ export function CourseDetail({ params }: { params: Record<string, string> }) {
   const slug = params.slug ?? '';
   const course = courses.find((c) => c.slug === slug);
   useDocumentTitle(course ? course.title : 'Curso não encontrado');
+  const { user } = useAuth();
 
   if (!course) return <CourseNotFound slug={slug} />;
 
@@ -68,6 +70,7 @@ export function CourseDetail({ params }: { params: Record<string, string> }) {
   if (!category) return <CourseNotFound slug={slug} />;
 
   const isFree = !course.price;
+  const enrolled = Boolean(user?.enrollments.some((e) => e.courseId === course.id));
   const related = relatedCourses(course);
 
   return (
@@ -171,10 +174,23 @@ export function CourseDetail({ params }: { params: Record<string, string> }) {
                   <span>Valor</span>
                   {formatPrice(course.price)}
                 </p>
-                <Button variant="primary" icon="lock" fullWidth disabled>
-                  Matrícula em breve
-                </Button>
-                <p className="field__hint">A matrícula será liberada junto com as contas de aluno, em uma próxima etapa.</p>
+                {enrolled ? (
+                  <>
+                    <p className="course-buy__status" role="status">
+                      <Icon name="check" size={18} /> Você está inscrito neste curso
+                    </p>
+                    <ButtonLink to="/aluno" variant="primary" fullWidth>
+                      Ir para a área do aluno
+                    </ButtonLink>
+                  </>
+                ) : (
+                  <>
+                    <ButtonLink to={`/cursos/${course.slug}/inscricao`} variant="primary" fullWidth arrow>
+                      Inscrever-se (demonstração)
+                    </ButtonLink>
+                    <p className="field__hint">Inscrição simulada: sem pagamento e sem cobrança. {user ? '' : 'Pede login antes de confirmar.'}</p>
+                  </>
+                )}
                 <ButtonLink to={catalogHref()} variant="secondary" fullWidth>
                   Voltar ao catálogo
                 </ButtonLink>

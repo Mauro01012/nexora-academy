@@ -6,9 +6,11 @@ import type { NavItem } from '@/config/navigation';
 import { ButtonLink } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Logo } from '@/components/ui/Logo';
+import { useAuth } from '@/hooks/useAuth';
 
 export function Header() {
   const path = usePath();
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -70,14 +72,29 @@ export function Header() {
         </nav>
 
         <div className="site-header__actions">
-          <AppLink route="student" className="student-link">
-            <Icon name="user" size={18} />
-            <span>Área do aluno</span>
-            <span className="student-link__tag">demo</span>
-          </AppLink>
-          <ButtonLink route="signup" variant="accent" className="site-header__cta">
-            Criar conta
-          </ButtonLink>
+          {user ? (
+            <>
+              <AppLink route="student" className="student-link">
+                <Icon name="user" size={18} />
+                <span>Área do aluno</span>
+                <span className="student-link__tag">demo</span>
+              </AppLink>
+              <ButtonLink route="logout" variant="ghost" className="site-header__cta">
+                Sair
+              </ButtonLink>
+            </>
+          ) : (
+            <>
+              <AppLink route="login" className="student-link">
+                <Icon name="user" size={18} />
+                <span>Entrar</span>
+                <span className="student-link__tag">demo</span>
+              </AppLink>
+              <ButtonLink route="signup" variant="accent" className="site-header__cta">
+                Criar conta
+              </ButtonLink>
+            </>
+          )}
         </div>
 
         <button
@@ -99,12 +116,25 @@ export function Header() {
             <ul className="mobile-menu__list">{mainNav.map(renderItem)}</ul>
           </nav>
           <div className="mobile-menu__actions">
-            <ButtonLink route="student" variant="secondary" icon="user" fullWidth onClick={close}>
-              Área do aluno (demo)
-            </ButtonLink>
-            <ButtonLink route="signup" variant="accent" fullWidth onClick={close}>
-              Criar conta
-            </ButtonLink>
+            {user ? (
+              <>
+                <ButtonLink route="student" variant="secondary" icon="user" fullWidth onClick={close}>
+                  Área do aluno (demo)
+                </ButtonLink>
+                <ButtonLink route="logout" variant="ghost" fullWidth onClick={close}>
+                  Sair
+                </ButtonLink>
+              </>
+            ) : (
+              <>
+                <ButtonLink route="login" variant="secondary" icon="user" fullWidth onClick={close}>
+                  Entrar (demo)
+                </ButtonLink>
+                <ButtonLink route="signup" variant="accent" fullWidth onClick={close}>
+                  Criar conta
+                </ButtonLink>
+              </>
+            )}
           </div>
         </div>
       </div>

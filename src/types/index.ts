@@ -53,3 +53,18 @@ export interface Stat {
   value: string;
   label: string;
 }
+
+/** Inscrição demonstrativa. O progresso é fictício e guarda só a contagem de aulas. */
+export interface DemoEnrollment {
+  courseId: string;
+  enrolledAt: string;
+  completedLessons: number;
+}
+
+/** Conta demonstrativa: não existe senha neste modelo, de propósito. */
+export interface DemoAccount {
+  name: string;
+  email: string;
+  createdAt: string;
+  enrollments: DemoEnrollment[];
+}

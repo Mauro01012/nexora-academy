@@ -69,6 +69,12 @@ export function navigate(to: string, section?: string): void {
   }
 }
 
+/** Vai para outro endereço substituindo o atual no histórico (o botão voltar não retorna à página de origem). */
+export function replacePath(to: string): void {
+  pendingSection = null;
+  window.location.replace(`#${to}`);
+}
+
 /** Deve ser chamado uma vez no layout: rola a página após cada mudança de rota. */
 export function useScrollOnNavigate(): void {
   const path = usePath();
