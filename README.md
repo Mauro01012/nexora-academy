@@ -29,6 +29,18 @@ src/
   types/       tipos compartilhados
 ```
 
+## Catálogo de cursos (Etapa 2A)
+
+A rota `#/cursos` exibe o catálogo: cabeçalho da página e grade responsiva de cartões (1, 2 ou 3 colunas conforme a largura).
+Busca, filtros, página de detalhes, login e painéis ficam para as próximas etapas.
+
+- **Dados:** `src/data/courses.ts` (12 cursos fictícios, 2 por categoria). O tipo `Course` está em `src/types/index.ts`; `price` é
+  opcional e, quando ausente, o curso é exibido como "Gratuito".
+- **Componentes:** `components/courses/CourseCard.tsx` (cartão) e `pages/Courses.tsx` (página). Reaproveitam `Card`, `Badge`,
+  `ButtonLink`, `CourseCover`, `Icon`, `Rating` e o `Reveal`; os estilos ficam em `styles/catalog.css`.
+- **Utilitários:** `utils/course.ts` (formatação de preço e números, padrão da capa por categoria).
+- **Página inicial:** continua usando as seis primeiras posições de `courses` (`homeShowcase`). Novos cursos devem entrar depois delas.
+
 ## Personalização da marca
 
 Edite `src/config/brand.ts`. As cores viram variáveis CSS (`--color-*`) em tempo de execução por `applyBrandTheme()`;

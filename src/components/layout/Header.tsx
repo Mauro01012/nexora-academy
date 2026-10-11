@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { AppLink, usePath } from '@/app/router';
+import { getRoute } from '@/app/routes';
 import { mainNav } from '@/config/navigation';
 import type { NavItem } from '@/config/navigation';
 import { ButtonLink } from '@/components/ui/Button';
@@ -35,6 +36,13 @@ export function Header() {
 
   const close = () => setOpen(false);
 
+  const normalized = path.replace(/\/+$/, '') || '/';
+  const isCurrent = (item: NavItem) => {
+    if (!item.route) return false;
+    const route = getRoute(item.route);
+    return route.implemented && route.path === normalized;
+  };
+
   const renderItem = (item: NavItem) => (
     <li key={item.label}>
       <AppLink
@@ -42,7 +50,7 @@ export function Header() {
         route={item.route}
         to={item.route ? undefined : '/'}
         section={item.section}
-        aria-current={item.route === 'home' && path === '/' ? 'page' : undefined}
+        aria-current={isCurrent(item) ? 'page' : undefined}
         onClick={close}
       >
         {item.label}

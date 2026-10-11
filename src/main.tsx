@@ -7,6 +7,7 @@ import '@/styles/base.css';
 import '@/styles/components.css';
 import '@/styles/layout.css';
 import '@/styles/home.css';
+import '@/styles/catalog.css';
 
 applyBrandTheme();
 // Habilita as animações de entrada somente quando o JavaScript está ativo.

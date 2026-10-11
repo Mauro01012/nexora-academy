@@ -35,6 +35,8 @@ export interface Course {
   lessons: number;
   rating: number;
   students: number;
+  /** Preço em reais (BRL). Quando ausente, o curso é gratuito. */
+  price?: number;
   instructorId: string;
   tags: string[];
   featured?: boolean;

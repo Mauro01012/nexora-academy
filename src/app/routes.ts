@@ -22,8 +22,8 @@ export const routes: RouteDef[] = [
     id: 'courses',
     path: '/cursos',
     title: 'Catálogo de cursos',
-    description: 'Catálogo completo com busca, filtros por categoria e nível.',
-    implemented: false,
+    description: 'Catálogo com os cursos da plataforma, com categoria, nível, instrutor, duração e preço.',
+    implemented: true,
     fallbackSection: 'cursos',
   },
   {

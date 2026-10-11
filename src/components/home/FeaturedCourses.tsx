@@ -3,25 +3,14 @@ import { Badge } from '@/components/ui/Badge';
 import { ButtonLink } from '@/components/ui/Button';
 import { CourseCover } from '@/components/ui/CourseCover';
 import { Icon } from '@/components/ui/Icon';
+import { Rating } from '@/components/ui/Rating';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/hooks/useReveal';
-import { categories, categoryById } from '@/data/categories';
-import { courses } from '@/data/courses';
+import { categoryById } from '@/data/categories';
+import { homeShowcase } from '@/data/courses';
 import { instructorById } from '@/data/instructors';
+import { coverPatternFor as patternFor, formatNumber } from '@/utils/course';
 import type { Course } from '@/types';
-
-const patternFor = (categoryId: string) => (['arcs', 'grid', 'bars'] as const)[categories.findIndex((c) => c.id === categoryId) % 3];
-const number = new Intl.NumberFormat('pt-BR');
-
-function Rating({ value }: { value: number }) {
-  return (
-    <span className="rating">
-      <Icon name="star" size={14} filled strokeWidth={1} />
-      <span className="visually-hidden">Avaliação </span>
-      {value.toFixed(1).replace('.', ',')}
-    </span>
-  );
-}
 
 function FeatureCard({ course }: { course: Course }) {
   const category = categoryById(course.category)!;
@@ -44,7 +33,7 @@ function FeatureCard({ course }: { course: Course }) {
             <Icon name="book" size={16} /> {course.lessons} aulas
           </li>
           <li>
-            <Icon name="users" size={16} /> {number.format(course.students)} alunos (exemplo)
+            <Icon name="users" size={16} /> {formatNumber(course.students)} alunos (exemplo)
           </li>
           <li>
             <Rating value={course.rating} />
@@ -83,7 +72,7 @@ function CourseRow({ course }: { course: Course }) {
 }
 
 export function FeaturedCourses() {
-  const [main, ...others] = courses;
+  const [main, ...others] = homeShowcase;
   return (
     <section id="cursos" className="section surface-light" aria-labelledby="cursos-title" tabIndex={-1}>
       <div className="container">

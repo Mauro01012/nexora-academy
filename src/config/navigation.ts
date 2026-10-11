@@ -19,7 +19,7 @@ export const footerColumns: { title: string; items: NavItem[] }[] = [
     title: 'Plataforma',
     items: [
       { label: 'Início', route: 'home' },
-      { label: 'Cursos em destaque', route: 'courses' },
+      { label: 'Catálogo de cursos', route: 'courses' },
       { label: 'Categorias', section: 'categorias' },
       { label: 'Instrutores', section: 'instrutores' },
     ],

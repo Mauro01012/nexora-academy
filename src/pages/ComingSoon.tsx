@@ -32,7 +32,7 @@ export function ComingSoon({ route, path }: ComingSoonProps) {
             Voltar ao início
           </ButtonLink>
           <ButtonLink route="courses" variant="secondary">
-            Ver cursos em destaque
+            Ver catálogo de cursos
           </ButtonLink>
         </div>
       </div>
