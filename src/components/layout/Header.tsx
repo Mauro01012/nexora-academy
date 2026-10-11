@@ -7,10 +7,12 @@ import { ButtonLink } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
 import { Logo } from '@/components/ui/Logo';
 import { useAuth } from '@/hooks/useAuth';
+import { useBrand } from '@/hooks/useBrand';
 
 export function Header() {
   const path = usePath();
   const { user } = useAuth();
+  const brand = useBrand();
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -63,7 +65,7 @@ export function Header() {
   return (
     <header className="site-header surface-dark" data-open={open}>
       <div className="container site-header__bar">
-        <AppLink to="/" className="site-header__brand" aria-label="NEXORA ACADEMY — ir para o início" onClick={close}>
+        <AppLink to="/" className="site-header__brand" aria-label={`${brand.name} — ir para o início`} onClick={close}>
           <Logo />
         </AppLink>
 

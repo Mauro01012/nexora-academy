@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/Input';
 import { categories } from '@/data/categories';
 import { facetCounts, hasActiveFilters, levels, sortOptions } from '@/utils/catalog';
 import type { CatalogFilters as Filters, SortKey } from '@/utils/catalog';
-import { courses } from '@/data/courses';
+import { useCourses } from '@/hooks/useCourses';
 
 interface Props {
   filters: Filters;
@@ -53,6 +53,7 @@ function ChipGroup({ label, options, value, allLabel, total, onSelect }: ChipGro
 /** Busca, filtros por categoria e nível e ordenação. Os números de cada opção respeitam a busca e o outro filtro. */
 export function CatalogFilters({ filters, onChange, onClear }: Props) {
   const sortId = useId();
+  const courses = useCourses();
   const counts = facetCounts(courses, filters);
   const sum = (record: Record<string, number>) => Object.values(record).reduce((a, b) => a + b, 0);
 

@@ -1,8 +1,9 @@
-import { brand } from '@/config/brand';
+import { useBrand } from '@/hooks/useBrand';
 import { ButtonAnchor, ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/hooks/useReveal';
 
 export function CallToAction() {
+  const brand = useBrand();
   return (
     <section className="cta-section surface-light" aria-labelledby="cta-title">
       <div className="container">

@@ -7,7 +7,7 @@ import { Rating } from '@/components/ui/Rating';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Reveal } from '@/hooks/useReveal';
 import { categoryById } from '@/data/categories';
-import { homeShowcase } from '@/data/courses';
+import { useCourses } from '@/hooks/useCourses';
 import { instructorById } from '@/data/instructors';
 import { coverPatternFor as patternFor, formatNumber } from '@/utils/course';
 import type { Course } from '@/types';
@@ -72,7 +72,9 @@ function CourseRow({ course }: { course: Course }) {
 }
 
 export function FeaturedCourses() {
-  const [main, ...others] = homeShowcase;
+  // Vitrine: as seis primeiras posições do catálogo (cursos novos entram no fim, sem mudar a página inicial).
+  const [main, ...others] = useCourses().slice(0, 6);
+  if (!main) return null;
   return (
     <section id="cursos" className="section surface-light" aria-labelledby="cursos-title" tabIndex={-1}>
       <div className="container">

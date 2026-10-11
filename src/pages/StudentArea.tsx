@@ -8,7 +8,7 @@ import { Icon } from '@/components/ui/Icon';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { AppLink } from '@/app/router';
 import { categoryById } from '@/data/categories';
-import { courses } from '@/data/courses';
+import { useCourses } from '@/hooks/useCourses';
 import { useAuth } from '@/hooks/useAuth';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { coverPatternFor, formatNumber } from '@/utils/course';
@@ -18,6 +18,7 @@ const dateFormat = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' });
 
 function StudentContent() {
   const { user, unenroll, advanceLesson } = useAuth();
+  const courses = useCourses();
   if (!user) return null;
 
   const items = user.enrollments.flatMap((enrollment) => {

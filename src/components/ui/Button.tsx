@@ -4,7 +4,7 @@ import type { RouteId } from '@/app/routes';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
 
-export type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost';
+export type ButtonVariant = 'primary' | 'accent' | 'secondary' | 'ghost' | 'danger';
 export type ButtonSize = 'md' | 'lg';
 
 interface Visual {

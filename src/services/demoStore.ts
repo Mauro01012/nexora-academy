@@ -1,4 +1,4 @@
-import { courses } from '@/data/courses';
+import { getCourses } from '@/services/courseStore';
 import type { DemoAccount, DemoEnrollment } from '@/types';
 
 /**
@@ -38,10 +38,11 @@ function sanitize(raw: unknown): Snapshot {
     if (accounts.some((a) => a.email === item.email)) continue;
     const enrollments: DemoEnrollment[] = [];
     for (const e of Array.isArray(item.enrollments) ? item.enrollments : []) {
-      const course = courses.find((c) => c.id === e?.courseId);
-      if (!course || !isText(e.enrolledAt, 40) || enrollments.some((x) => x.courseId === course.id)) continue;
+      // Mantém inscrições de cursos que o painel excluiu: elas voltam a aparecer se o catálogo for restaurado.
+      if (!isText(e?.courseId, 60) || !isText(e.enrolledAt, 40) || enrollments.some((x) => x.courseId === e.courseId)) continue;
+      const lessons = getCourses().find((c) => c.id === e.courseId)?.lessons ?? 100000;
       const done = Number.isFinite(e.completedLessons) ? Math.floor(e.completedLessons) : 0;
-      enrollments.push({ courseId: course.id, enrolledAt: e.enrolledAt, completedLessons: Math.min(Math.max(done, 0), course.lessons) });
+      enrollments.push({ courseId: e.courseId, enrolledAt: e.enrolledAt, completedLessons: Math.min(Math.max(done, 0), lessons) });
     }
     accounts.push({ name: item.name, email: item.email, createdAt: item.createdAt, enrollments });
   }
@@ -128,7 +129,7 @@ function updateSessionAccount(change: (account: DemoAccount) => DemoAccount): vo
 
 export const enroll = (courseId: string): void =>
   updateSessionAccount((a) =>
-    a.enrollments.some((e) => e.courseId === courseId) || !courses.some((c) => c.id === courseId)
+    a.enrollments.some((e) => e.courseId === courseId) || !getCourses().some((c) => c.id === courseId)
       ? a
       : { ...a, enrollments: [...a.enrollments, { courseId, enrolledAt: new Date().toISOString(), completedLessons: 0 }] },
   );
@@ -140,7 +141,7 @@ export const advanceLesson = (courseId: string): void =>
   updateSessionAccount((a) => ({
     ...a,
     enrollments: a.enrollments.map((e) => {
-      const lessons = courses.find((c) => c.id === courseId)?.lessons ?? 0;
+      const lessons = getCourses().find((c) => c.id === courseId)?.lessons ?? 0;
       return e.courseId === courseId ? { ...e, completedLessons: Math.min(e.completedLessons + 1, lessons) } : e;
     }),
   }));

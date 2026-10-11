@@ -5,7 +5,7 @@ import { Button, ButtonLink } from '@/components/ui/Button';
 import { CourseCover } from '@/components/ui/CourseCover';
 import { Icon } from '@/components/ui/Icon';
 import { categoryById } from '@/data/categories';
-import { courses } from '@/data/courses';
+import { useCourses } from '@/hooks/useCourses';
 import { useAuth } from '@/hooks/useAuth';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { CourseNotFound } from '@/pages/CourseDetail';
@@ -97,6 +97,7 @@ function EnrollFlow({ course }: { course: Course }) {
 /** Fluxo demonstrativo de inscrição (#/cursos/:slug/inscricao). Exige sessão. */
 export function Enroll({ params }: { params: Record<string, string> }) {
   const slug = params.slug ?? '';
+  const courses = useCourses();
   const course = courses.find((c) => c.slug === slug);
   useDocumentTitle(course ? `Inscrição: ${course.title}` : 'Curso não encontrado');
   if (!course) return <CourseNotFound slug={slug} />;

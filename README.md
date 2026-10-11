@@ -70,6 +70,25 @@ Fluxo de autenticação **simulado**, só no navegador. Não há servidor, token
   (`?next=`, aceito só para caminhos internos conhecidos). É uma barreira de interface, não proteção de dados.
 - **Apagar dados:** em `#/sair`, a opção "apagar também os dados" remove tudo o que a demonstração guardou.
 
+## Painel administrativo (Etapa 3B)
+
+Painel **demonstrativo**, só no navegador. Não há backend, autorização real nem segurança de produção.
+
+- **Acesso:** `#/admin` mostra um aviso e um botão para entrar como administrador de demonstração. Qualquer pessoa pode fazê-lo. O
+  modo fica no `sessionStorage` (acaba ao fechar a aba) e é independente da conta de aluno. O painel tem estrutura própria
+  (barra escura com selo "Admin · demonstração", menu lateral e faixa de aviso), sem o cabeçalho e o rodapé do site.
+- **Visão geral** (`#/admin`): métricas marcadas como "demo", calculadas dos cursos cadastrados, e um bloco separado com o que é local
+  deste navegador (contas, inscrições, catálogo editado, marca personalizada).
+- **Cursos** (`#/admin/cursos`, `/novo`, `/:id`): listar, filtrar, cadastrar, editar e excluir. Validação por campo (título, slug único,
+  resumo, números, valor, temas). Excluir e restaurar pedem confirmação. Cursos novos entram no fim do catálogo, sem alterar a vitrine
+  da página inicial.
+- **Dados:** `src/data/courses.ts` continua sendo o conjunto inicial e nunca é alterado. As edições ficam no `localStorage`
+  (`nexora.courses.v1`, em `services/courseStore.ts`); "Restaurar cursos iniciais" descarta tudo. Catálogo, detalhes, busca e
+  página inicial leem dessa mesma fonte (`hooks/useCourses`). Inscrições de alunos em cursos excluídos ficam ocultas e voltam se o curso voltar.
+- **Marca** (`#/admin/marca`): nome, complemento, slogan, descrição, e-mail e duas cores, com prévia. Os padrões continuam em
+  `src/config/brand.ts`; o que for salvo vai por cima (`services/brandStore.ts`, `nexora.brand.v1`). Limites de tamanho e contraste mínimo
+  de 4,5:1 protegem o layout e a legibilidade. "Restaurar identidade original" volta à paleta exata do arquivo.
+
 ## Personalização da marca
 
 Edite `src/config/brand.ts`. As cores viram variáveis CSS (`--color-*`) em tempo de execução por `applyBrandTheme()`;

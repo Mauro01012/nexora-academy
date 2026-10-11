@@ -6,7 +6,7 @@ import { CourseCover } from '@/components/ui/CourseCover';
 import { Icon } from '@/components/ui/Icon';
 import { Rating } from '@/components/ui/Rating';
 import { categoryById } from '@/data/categories';
-import { courses } from '@/data/courses';
+import { useCourses } from '@/hooks/useCourses';
 import { instructorById } from '@/data/instructors';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,7 +15,7 @@ import { coverPatternFor, formatNumber, formatPrice } from '@/utils/course';
 import type { Course } from '@/types';
 
 /** Até três sugestões: primeiro a mesma categoria, depois o mesmo nível, depois o restante. */
-function relatedCourses(course: Course): Course[] {
+function relatedCourses(course: Course, courses: Course[]): Course[] {
   const others = courses.filter((c) => c.id !== course.id);
   const score = (c: Course) => (c.category === course.category ? 2 : 0) + (c.level === course.level ? 1 : 0);
   return others
@@ -59,6 +59,7 @@ export function CourseNotFound({ slug }: { slug: string }) {
 /** Página de detalhes de um curso (#/cursos/:slug). */
 export function CourseDetail({ params }: { params: Record<string, string> }) {
   const slug = params.slug ?? '';
+  const courses = useCourses();
   const course = courses.find((c) => c.slug === slug);
   useDocumentTitle(course ? course.title : 'Curso não encontrado');
   const { user } = useAuth();
@@ -71,7 +72,7 @@ export function CourseDetail({ params }: { params: Record<string, string> }) {
 
   const isFree = !course.price;
   const enrolled = Boolean(user?.enrollments.some((e) => e.courseId === course.id));
-  const related = relatedCourses(course);
+  const related = relatedCourses(course, courses);
 
   return (
     <>

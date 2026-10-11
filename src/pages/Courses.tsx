@@ -7,7 +7,7 @@ import { Icon } from '@/components/ui/Icon';
 import { Reveal } from '@/hooks/useReveal';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { categories } from '@/data/categories';
-import { courses } from '@/data/courses';
+import { useCourses } from '@/hooks/useCourses';
 import {
   defaultFilters,
   filtersFromParams,
@@ -25,6 +25,7 @@ const readFilters = (): Filters => filtersFromParams(readQuery(), categoryIds);
 /** Catálogo: busca, filtros e ordenação combinados. O estado fica no endereço (#/cursos?q=...) e pode ser compartilhado. */
 export function Courses() {
   useDocumentTitle('Catálogo de cursos');
+  const courses = useCourses();
   const [filters, setFilters] = useState<Filters>(readFilters);
 
   // Links com filtros e os botões voltar/avançar do navegador alteram o endereço sem remontar a página.
@@ -49,7 +50,7 @@ export function Courses() {
   const change = (patch: Partial<Filters>) => setFilters((current) => ({ ...current, ...patch }));
   const clear = () => setFilters((current) => ({ ...defaultFilters, sort: current.sort }));
 
-  const results = useMemo(() => queryCourses(courses, filters), [filters]);
+  const results = useMemo(() => queryCourses(courses, filters), [courses, filters]);
   const filtered = hasActiveFilters(filters);
 
   const areas = new Set(courses.map((c) => c.category)).size;
@@ -115,16 +116,20 @@ export function Courses() {
               <span className="catalog-empty__icon" aria-hidden="true">
                 <Icon name="compass" size={28} />
               </span>
-              <h3 className="display catalog-empty__title">Nenhum curso encontrado</h3>
+              <h3 className="display catalog-empty__title">{courses.length === 0 ? 'O catálogo está vazio' : 'Nenhum curso encontrado'}</h3>
               <p className="catalog-empty__text">
-                {filters.q.trim()
+                {courses.length === 0
+                  ? 'Ainda não há cursos publicados. Volte em breve.'
+                  : filters.q.trim()
                   ? `Não há cursos para “${filters.q.trim()}” com os filtros escolhidos.`
                   : 'Nenhum curso combina com os filtros escolhidos.'}{' '}
-                Tente outro termo, remova um filtro ou volte à lista completa.
+                {courses.length === 0 ? '' : 'Tente outro termo, remova um filtro ou volte à lista completa.'}
               </p>
-              <Button variant="primary" onClick={clear}>
-                Limpar busca e filtros
-              </Button>
+              {courses.length === 0 ? null : (
+                <Button variant="primary" onClick={clear}>
+                  Limpar busca e filtros
+                </Button>
+              )}
             </div>
           )}
 

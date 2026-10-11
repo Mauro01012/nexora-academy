@@ -3,7 +3,7 @@
  * Para ativar uma área nas próximas etapas: (1) crie a página, (2) registre-a em
  * `src/app/pages.tsx` e (3) troque `implemented` para `true`. Nenhum link precisa mudar.
  */
-export type RouteId = 'home' | 'courses' | 'course' | 'enroll' | 'login' | 'signup' | 'logout' | 'student' | 'admin';
+export type RouteId = 'home' | 'courses' | 'course' | 'enroll' | 'login' | 'signup' | 'logout' | 'student' | 'admin' | 'adminCourses' | 'adminCourseNew' | 'adminCourseEdit' | 'adminBrand';
 
 export interface RouteDef {
   id: RouteId;
@@ -54,9 +54,13 @@ export const routes: RouteDef[] = [
     id: 'admin',
     path: '/admin',
     title: 'Painel administrativo',
-    description: 'Gestão de cursos, instrutores, alunos e indicadores.',
-    implemented: false,
+    description: 'Visão geral, cursos e marca (demonstração, sem autorização real).',
+    implemented: true,
   },
+  { id: 'adminCourses', path: '/admin/cursos', title: 'Cursos (admin)', description: 'Lista e gestão dos cursos de demonstração.', implemented: true },
+  { id: 'adminCourseNew', path: '/admin/cursos/novo', title: 'Novo curso', description: 'Cadastro de curso de demonstração.', implemented: true },
+  { id: 'adminCourseEdit', path: '/admin/cursos/:id', title: 'Editar curso', description: 'Edição de curso de demonstração.', implemented: true },
+  { id: 'adminBrand', path: '/admin/marca', title: 'Marca (admin)', description: 'Personalização da identidade da marca.', implemented: true },
 ];
 
 export function getRoute(id: RouteId): RouteDef {

@@ -1,6 +1,7 @@
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { Icon } from '@/components/ui/Icon';
 import type { IconName } from '@/components/ui/Icon';
+import { useBrand } from '@/hooks/useBrand';
 import { Reveal } from '@/hooks/useReveal';
 
 const benefits: { icon: IconName; title: string; text: string }[] = [
@@ -27,6 +28,7 @@ const benefits: { icon: IconName; title: string; text: string }[] = [
 ];
 
 export function Benefits() {
+  const brand = useBrand();
   return (
     <section id="sobre" className="section benefits surface-dark" aria-labelledby="sobre-title" tabIndex={-1}>
       <div className="container benefits__grid">
@@ -37,7 +39,7 @@ export function Benefits() {
             id="sobre-title"
             className="section-heading--on-dark"
           >
-            A NEXORA ACADEMY combina conteúdo enxuto, prática guiada e acompanhamento constante. O objetivo não é
+            A {brand.name} combina conteúdo enxuto, prática guiada e acompanhamento constante. O objetivo não é
             acumular aulas assistidas, e sim construir habilidades que apareçam no trabalho.
           </SectionHeading>
           <p className="benefits__quote">

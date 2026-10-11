@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from '@/App';
-import { applyBrandTheme } from '@/config/brand';
+import { initBrand } from '@/services/brandStore';
 import '@/styles/tokens.css';
 import '@/styles/base.css';
 import '@/styles/components.css';
@@ -9,8 +9,9 @@ import '@/styles/layout.css';
 import '@/styles/home.css';
 import '@/styles/catalog.css';
 import '@/styles/account.css';
+import '@/styles/admin.css';
 
-applyBrandTheme();
+initBrand();
 // Habilita as animações de entrada somente quando o JavaScript está ativo.
 document.documentElement.classList.add('js');
 

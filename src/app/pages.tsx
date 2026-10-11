@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
 import type { RouteId } from '@/app/routes';
+import { AdminBrand, AdminCourseForm, AdminCourses, AdminOverview } from '@/pages/admin';
 import { CourseDetail } from '@/pages/CourseDetail';
 import { Enroll } from '@/pages/Enroll';
 import { Courses } from '@/pages/Courses';
@@ -10,8 +11,8 @@ import { Signup } from '@/pages/Signup';
 import { StudentArea } from '@/pages/StudentArea';
 
 /**
- * Registro das páginas implementadas. Na próxima etapa, adicione aqui o painel
- * administrativo (e marque `implemented: true` em routes.ts).
+ * Registro das páginas implementadas. Para ativar uma nova rota, registre a página aqui
+ * e marque `implemented: true` em routes.ts.
  */
 export const pages: Partial<Record<RouteId, ComponentType<{ params: Record<string, string> }>>> = {
   home: Home,
@@ -22,4 +23,9 @@ export const pages: Partial<Record<RouteId, ComponentType<{ params: Record<strin
   signup: Signup,
   logout: Logout,
   student: StudentArea,
+  admin: AdminOverview,
+  adminCourses: AdminCourses,
+  adminCourseNew: AdminCourseForm,
+  adminCourseEdit: AdminCourseForm,
+  adminBrand: AdminBrand,
 };

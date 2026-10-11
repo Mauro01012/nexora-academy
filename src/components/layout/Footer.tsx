@@ -1,15 +1,16 @@
 import { AppLink } from '@/app/router';
 import { getRoute } from '@/app/routes';
-import { brand } from '@/config/brand';
+import { useBrand } from '@/hooks/useBrand';
 import { footerColumns } from '@/config/navigation';
 import { Logo } from '@/components/ui/Logo';
 
 export function Footer() {
+  const brand = useBrand();
   return (
     <footer className="site-footer surface-dark surface-deep">
       <div className="container site-footer__grid">
         <div className="site-footer__about">
-          <AppLink to="/" aria-label="NEXORA ACADEMY — ir para o início">
+          <AppLink to="/" aria-label={`${brand.name} — ir para o início`}>
             <Logo />
           </AppLink>
           <p className="site-footer__text">{brand.description}</p>

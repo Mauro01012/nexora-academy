@@ -30,11 +30,11 @@ export const defaultFilters: CatalogFilters = { q: '', category: '', level: '', 
 export const normalize = (text: string): string =>
   text.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
-const searchIndex = new Map<string, string>();
+const searchIndex = new WeakMap<Course, string>();
 
 /** Campos pesquisáveis: título, resumo, tags, categoria, nível, nome da instrutoria e "gratuito". */
 function haystack(course: Course): string {
-  let text = searchIndex.get(course.id);
+  let text = searchIndex.get(course);
   if (text === undefined) {
     const instructor = instructorById(course.instructorId);
     text = normalize(
@@ -48,7 +48,7 @@ function haystack(course: Course): string {
         course.price ? '' : 'gratuito',
       ].join(' '),
     );
-    searchIndex.set(course.id, text);
+    searchIndex.set(course, text);
   }
   return text;
 }
