@@ -1,7 +1,4 @@
 /* ---------- Painel administrativo (demonstração) ---------- */
-.btn--danger { background: #b3261e; color: #fff; }
-.btn--danger:hover { background: #8f1d17; box-shadow: var(--shadow-md); }
-.btn--text-danger { color: #b3261e; }
 .input--select { appearance: auto; }
 .input--area { min-height: 110px; padding: var(--space-3) var(--space-4); resize: vertical; line-height: 1.5; }
 
@@ -16,7 +13,7 @@
 .admin-nav__link { display: flex; align-items: center; gap: var(--space-3); min-height: 44px; padding: 0 var(--space-4); font-weight: 600; font-size: var(--text-sm); border-radius: var(--radius-md); color: var(--color-ink-800); }
 .admin-nav__link:hover { background: color-mix(in srgb, var(--color-ink-900) 8%, transparent); }
 .admin-nav__link[aria-current='page'] { color: #fff; background: var(--color-ink-800); }
-.admin__content { display: grid; gap: var(--space-5); min-width: 0; }
+.admin__content { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-5); min-width: 0; } /* sem a trilha minmax(0,1fr) a tabela larga alargava a página inteira no celular */
 .admin__head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
 .admin__title { font-size: var(--text-2xl); }
 .admin__lead { max-width: 70ch; color: var(--text-muted); }
@@ -25,7 +22,6 @@
 .admin__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-5); }
 .admin-card { display: grid; gap: var(--space-4); padding: var(--space-5); border-radius: var(--radius-lg); align-content: start; }
 .admin-card__title { font-size: var(--text-lg); }
-.admin-flash { padding: var(--space-3) var(--space-4); font-weight: 600; font-size: var(--text-sm); color: var(--color-mint-600); background: color-mix(in srgb, var(--color-mint-600) 10%, white); border: 1px solid var(--color-mint-600); border-radius: var(--radius-md); }
 
 .tag-demo { justify-self: start; padding: 0.05rem 0.45rem; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-ink-950); background: var(--color-amber-400); border-radius: var(--radius-pill); }
 .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--space-4); }
@@ -45,7 +41,8 @@
 
 .admin-tools { display: flex; align-items: flex-end; gap: var(--space-4); flex-wrap: wrap; }
 .admin-tools .field { flex: 1 1 260px; }
-.admin-table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); }
+.admin-table-wrap:focus-visible { outline-offset: -3px; }
+.admin-table-wrap { position: relative; overflow-x: auto; background: var(--surface); border: 1px solid var(--border-soft); border-radius: var(--radius-lg); }
 .admin-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: var(--text-sm); }
 .admin-table th, .admin-table td { padding: var(--space-3) var(--space-4); text-align: left; vertical-align: middle; border-bottom: 1px solid var(--border-soft); }
 .admin-table thead th { font-size: var(--text-xs); color: var(--text-muted); font-weight: 600; background: color-mix(in srgb, var(--color-paper-200) 50%, white); }

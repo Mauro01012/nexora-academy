@@ -114,7 +114,6 @@
 .course-buy { overflow: hidden; padding: 0; border-radius: var(--radius-xl); }
 .course-buy__cover { display: block; width: 100%; height: 130px; }
 .course-buy__body { display: grid; gap: var(--space-4); padding: var(--space-5); }
-.course-buy .btn[disabled] { opacity: 0.6; cursor: not-allowed; }
 .course-facts { display: grid; gap: var(--space-3); padding-top: var(--space-4); border-top: 1px solid var(--border-soft); font-size: var(--text-sm); }
 .course-facts div { display: flex; justify-content: space-between; gap: var(--space-4); }
 .course-facts dt { color: var(--text-muted); }

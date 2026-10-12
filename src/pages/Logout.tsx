@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { ButtonLink, Button } from '@/components/ui/Button';
-import { Icon } from '@/components/ui/Icon';
+import { useEffect, useRef, useState } from 'react';
+import { focusPageHeading } from '@/app/focus';
+import { Button, ButtonLink } from '@/components/ui/Button';
+import { NoticePage } from '@/components/ui/NoticePage';
 import { useAuth } from '@/hooks/useAuth';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
@@ -12,6 +13,13 @@ export function Logout() {
   const { user, logOut, resetDemo } = useAuth();
   const [phase, setPhase] = useState<Phase>('idle');
   const [erase, setErase] = useState(false);
+
+  // O botão que a pessoa acabou de usar some da tela: leva o foco ao novo título para ele ser anunciado.
+  const firstRender = useRef(true);
+  useEffect(() => {
+    if (firstRender.current) firstRender.current = false;
+    else focusPageHeading();
+  }, [phase]);
 
   const confirm = () => {
     if (erase) resetDemo();
@@ -32,45 +40,43 @@ export function Logout() {
     text = `Você está conectado como ${user.name} (${user.email}), em uma conta de demonstração.`;
   }
 
-  return (
-    <section className="page-notice surface-light" aria-labelledby="logout-title">
-      <div className="container page-notice__inner">
-        <span className="page-notice__icon" aria-hidden="true">
-          <Icon name="user" size={28} />
-        </span>
-        <h1 id="logout-title" className="display page-notice__title">
-          {title}
-        </h1>
-        <p className="page-notice__text" role="status">
-          {text}
-        </p>
+  const confirming = phase === 'idle' && user;
 
-        {phase === 'idle' && user ? (
+  return (
+    <NoticePage
+      id="logout-title"
+      icon="user"
+      title={title}
+      text={text}
+      textRole="status"
+      actions={
+        confirming ? (
           <>
-            <div className="check">
-              <input id="logout-erase" type="checkbox" checked={erase} onChange={(e) => setErase(e.target.checked)} />
-              <label htmlFor="logout-erase">Apagar também os dados desta demonstração neste navegador (contas e progresso)</label>
-            </div>
-            <div className="page-notice__actions">
-              <Button variant="primary" onClick={confirm}>
-                Sair da conta
-              </Button>
-              <ButtonLink to="/aluno" variant="secondary">
-                Cancelar
-              </ButtonLink>
-            </div>
+            <Button variant="primary" onClick={confirm}>
+              Sair da conta
+            </Button>
+            <ButtonLink to="/aluno" variant="secondary">
+              Cancelar
+            </ButtonLink>
           </>
         ) : (
-          <div className="page-notice__actions">
+          <>
             <ButtonLink to="/entrar" variant="primary" arrow>
               Entrar
             </ButtonLink>
             <ButtonLink to="/cursos" variant="secondary">
               Ver catálogo de cursos
             </ButtonLink>
-          </div>
-        )}
-      </div>
-    </section>
+          </>
+        )
+      }
+    >
+      {confirming ? (
+        <div className="check">
+          <input id="logout-erase" type="checkbox" checked={erase} onChange={(e) => setErase(e.target.checked)} />
+          <label htmlFor="logout-erase">Apagar também os dados desta demonstração neste navegador (contas e progresso)</label>
+        </div>
+      ) : null}
+    </NoticePage>
   );
 }

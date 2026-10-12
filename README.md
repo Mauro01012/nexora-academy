@@ -1,4 +1,4 @@
-# NEXORA ACADEMY — Etapa 1/4
+# NEXORA ACADEMY — Etapa 4A (integração e acabamento)
 
 Plataforma demonstrativa de cursos online (React + TypeScript + Vite). Esta etapa entrega a fundação técnica,
 o sistema visual e a página inicial. Todo o conteúdo (cursos, instrutores, números, depoimentos) é fictício.
@@ -39,7 +39,7 @@ Busca, filtros e página de detalhes foram entregues na etapa 2B (abaixo). Login
 - **Componentes:** `components/courses/CourseCard.tsx` (cartão) e `pages/Courses.tsx` (página). Reaproveitam `Card`, `Badge`,
   `ButtonLink`, `CourseCover`, `Icon`, `Rating` e o `Reveal`; os estilos ficam em `styles/catalog.css`.
 - **Utilitários:** `utils/course.ts` (formatação de preço e números, padrão da capa por categoria).
-- **Página inicial:** continua usando as seis primeiras posições de `courses` (`homeShowcase`). Novos cursos devem entrar depois delas.
+- **Página inicial:** usa as seis primeiras posições do catálogo atual (`useCourses().slice(0, 6)`; `homeShowcase` em `data/courses.ts` é só a referência dos dados iniciais). Novos cursos devem entrar depois delas.
 
 ## Busca, filtros e detalhes (Etapa 2B)
 
@@ -88,6 +88,23 @@ Painel **demonstrativo**, só no navegador. Não há backend, autorização real
 - **Marca** (`#/admin/marca`): nome, complemento, slogan, descrição, e-mail e duas cores, com prévia. Os padrões continuam em
   `src/config/brand.ts`; o que for salvo vai por cima (`services/brandStore.ts`, `nexora.brand.v1`). Limites de tamanho e contraste mínimo
   de 4,5:1 protegem o layout e a legibilidade. "Restaurar identidade original" volta à paleta exata do arquivo.
+
+## Integração e acabamento (Etapa 4A)
+
+Revisão dos fluxos de ponta a ponta (início, catálogo, filtros, detalhes, cadastro, login, área do aluno e painel), sem novas
+funcionalidades e sem alterar dados ou a configuração da marca.
+
+- **Build:** `tsconfig.json` sem `baseUrl` (obsoleto no TypeScript 6; `paths` agora usa `./src/*`).
+- **Navegação:** "Cursos" no menu limpa busca e filtros; o item do menu fica marcado também nas páginas de detalhe e inscrição;
+  a cada troca de rota o foco vai ao título da página (`app/focus.ts`) e o título da aba é atualizado também no 404.
+- **Estados:** `ErrorBoundary` evita tela em branco; tela de carregamento e aviso sem JavaScript no `index.html`; confirmação antes
+  de cancelar inscrição (o progresso é descartado) e mensagem de confirmação (`ui/Flash`); o foco não se perde depois de inscrever,
+  sair da conta, excluir ou entrar no modo admin.
+- **Componentes:** `ui/Field` (rótulo, dica e erro) é a base de `Input`, `SelectField` e `TextAreaField`; `ui/NoticePage` substitui o
+  markup repetido de "não encontrado", acesso restrito, saída da conta e erro.
+- **Cores de erro:** `--danger` (de `danger-600`/`danger-400` em `config/brand.ts`) com contraste mínimo de 4,5:1, independente da cor de destaque.
+- **Home:** a contagem de cursos por categoria vem do catálogo atual (antes era um número ilustrativo fixo, que não batia com a lista).
+  O campo `courseCount` continua em `data/categories.ts`, sem uso.
 
 ## Personalização da marca
 

@@ -33,7 +33,7 @@ export function HeroVisual() {
             </span>
             <span className="hv-muted">12 semanas</span>
           </header>
-          <h3 className="hv-card__title">Desenvolvimento Front-end</h3>
+          <p className="hv-card__title">Desenvolvimento Front-end</p>
           <ul className="hv-modules">
             {modules.map((m) => (
               <li key={m.title} className={`hv-module hv-module--${m.state}`}>

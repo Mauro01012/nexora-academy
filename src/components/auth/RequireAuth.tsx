@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { replacePath, usePath } from '@/app/router';
 import { ButtonLink } from '@/components/ui/Button';
+import { NoticePage } from '@/components/ui/NoticePage';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
@@ -11,23 +12,24 @@ import { useAuth } from '@/hooks/useAuth';
 export function RequireAuth({ children }: { children: ReactNode }) {
   const { isAuthenticated } = useAuth();
   const path = usePath();
+  const loginTo = `/entrar?next=${encodeURIComponent(path)}`;
 
   useEffect(() => {
-    if (!isAuthenticated) replacePath(`/entrar?next=${encodeURIComponent(path)}`);
-  }, [isAuthenticated, path]);
+    if (!isAuthenticated) replacePath(loginTo);
+  }, [isAuthenticated, loginTo]);
 
   if (isAuthenticated) return <>{children}</>;
   return (
-    <section className="page-notice surface-light" aria-labelledby="gate-title">
-      <div className="container page-notice__inner">
-        <h1 id="gate-title" className="display page-notice__title">
-          Entre para continuar
-        </h1>
-        <p className="page-notice__text">Esta área é só para quem está conectado à conta de demonstração. Levando você ao login…</p>
-        <ButtonLink to={`/entrar?next=${encodeURIComponent(path)}`} variant="primary">
+    <NoticePage
+      id="gate-title"
+      icon="lock"
+      title="Entre para continuar"
+      text="Esta área é só para quem está conectado à conta de demonstração. Levando você ao login…"
+      actions={
+        <ButtonLink to={loginTo} variant="primary">
           Ir para o login
         </ButtonLink>
-      </div>
-    </section>
+      }
+    />
   );
 }

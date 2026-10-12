@@ -41,7 +41,7 @@ function FeatureCard({ course }: { course: Course }) {
         </ul>
         <div className="feature-course__footer">
           <p className="feature-course__by">
-            <span>Instrutora</span> {instructor?.name}
+            <span>Instrutoria</span> {instructor?.name}
           </p>
           <ButtonLink to={`/cursos/${course.slug}`} variant="accent" arrow>
             Ver detalhes

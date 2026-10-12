@@ -3,6 +3,7 @@ import { CourseCard, LevelMeter } from '@/components/courses/CourseCard';
 import { Badge } from '@/components/ui/Badge';
 import { ButtonLink } from '@/components/ui/Button';
 import { CourseCover } from '@/components/ui/CourseCover';
+import { NoticePage } from '@/components/ui/NoticePage';
 import { Icon } from '@/components/ui/Icon';
 import { Rating } from '@/components/ui/Rating';
 import { categoryById } from '@/data/categories';
@@ -27,32 +28,23 @@ function relatedCourses(course: Course, courses: Course[]): Course[] {
 
 export function CourseNotFound({ slug }: { slug: string }) {
   return (
-    <section className="page-notice surface-light" aria-labelledby="notice-title">
-      <div className="container page-notice__inner">
-        <span className="page-notice__icon" aria-hidden="true">
-          <Icon name="compass" size={28} />
-        </span>
-        <p className="eyebrow">
-          <span className="eyebrow__dot" aria-hidden="true" />
-          Curso não encontrado
-        </p>
-        <h1 id="notice-title" className="display page-notice__title">
-          Não existe um curso com esse endereço
-        </h1>
-        <p className="page-notice__text">
-          Não encontramos o curso “{slug}”. Ele pode ter sido renomeado ou o link pode estar incompleto. Veja a lista de
-          cursos para encontrar o que procura.
-        </p>
-        <div className="page-notice__actions">
+    <NoticePage
+      id="notice-title"
+      icon="compass"
+      eyebrow="Curso não encontrado"
+      title="Não existe um curso com esse endereço"
+      text={`Não encontramos o curso “${slug}”. Ele pode ter sido renomeado ou o link pode estar incompleto. Veja a lista de cursos para encontrar o que procura.`}
+      actions={
+        <>
           <ButtonLink to={catalogHref()} variant="primary" arrow>
             Ver catálogo de cursos
           </ButtonLink>
           <ButtonLink to="/" variant="secondary">
             Voltar ao início
           </ButtonLink>
-        </div>
-      </div>
-    </section>
+        </>
+      }
+    />
   );
 }
 
@@ -107,7 +99,6 @@ export function CourseDetail({ params }: { params: Record<string, string> }) {
               {course.lessons} aulas
             </li>
             <li>
-              <Icon name="star" size={16} strokeWidth={2.2} />
               <Rating value={course.rating} />
             </li>
             <li>
@@ -125,10 +116,9 @@ export function CourseDetail({ params }: { params: Record<string, string> }) {
               <h2 id="curso-sobre" className="display course-detail__heading">
                 Sobre o curso
               </h2>
-              <p className="course-detail__text">{course.summary}</p>
               <p className="course-detail__text">
-                São {course.lessons} aulas e cerca de {course.hours} horas de conteúdo, no nível {course.level.toLowerCase()}
-                , da área de {category.name}.
+                São {course.lessons} aulas e cerca de {course.hours} horas de conteúdo, no nível {course.level.toLowerCase()}, da área de{' '}
+                {category.name}.
               </p>
             </section>
 
@@ -189,7 +179,9 @@ export function CourseDetail({ params }: { params: Record<string, string> }) {
                     <ButtonLink to={`/cursos/${course.slug}/inscricao`} variant="primary" fullWidth arrow>
                       Inscrever-se (demonstração)
                     </ButtonLink>
-                    <p className="field__hint">Inscrição simulada: sem pagamento e sem cobrança. {user ? '' : 'Pede login antes de confirmar.'}</p>
+                    <p className="field__hint">
+                      Inscrição simulada, sem pagamento e sem cobrança.{user ? '' : ' Você entra ou cria uma conta de demonstração antes de confirmar.'}
+                    </p>
                   </>
                 )}
                 <ButtonLink to={catalogHref()} variant="secondary" fullWidth>

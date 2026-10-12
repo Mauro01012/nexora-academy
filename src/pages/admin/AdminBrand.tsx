@@ -5,6 +5,7 @@ import { TextAreaField } from '@/components/admin/FormFields';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Flash } from '@/components/ui/Flash';
 import { Input } from '@/components/ui/Input';
 import { Logo } from '@/components/ui/Logo';
 import { brand } from '@/config/brand';
@@ -62,11 +63,7 @@ export function AdminBrand() {
         Parte dos padrões de <code>src/config/brand.ts</code> e aplica por cima o que for salvo aqui, só neste navegador. A prévia mostra o resultado antes de salvar.
       </p>
 
-      {saved ? (
-        <p className="admin-flash" role="status">
-          {saved}
-        </p>
-      ) : null}
+      {saved ? <Flash>{saved}</Flash> : null}
 
       <div className="brand-admin">
         <form className="admin-form" noValidate onSubmit={submit}>

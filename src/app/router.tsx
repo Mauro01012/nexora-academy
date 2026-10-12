@@ -1,5 +1,6 @@
-import { useEffect, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
 import type { AnchorHTMLAttributes, MouseEvent, ReactNode } from 'react';
+import { focusPageHeading } from '@/app/focus';
 import { resolveRoute } from '@/app/routes';
 import type { LinkTarget, RouteId } from '@/app/routes';
 
@@ -44,7 +45,7 @@ export function usePath(): string {
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function flushScroll(): void {
+function flushScroll(moveFocus = false): void {
   const section = pendingSection;
   pendingSection = null;
   window.requestAnimationFrame(() => {
@@ -57,16 +58,24 @@ function flushScroll(): void {
       }
     }
     window.scrollTo({ top: 0, behavior: 'auto' });
+    if (moveFocus) focusPageHeading();
   });
 }
 
+/** Endereço atual depois do "#", com a query (ex.: /cursos?q=react). Vazio equivale à página inicial. */
+const currentTarget = (): string => window.location.hash.replace(/^#/, '') || '/';
+
 export function navigate(to: string, section?: string): void {
   pendingSection = section ?? null;
-  if (readPath() === to) {
+  if (currentTarget() === to) {
     flushScroll();
-  } else {
-    window.location.hash = to;
+    return;
   }
+  const samePath = readPath() === to.split('?')[0];
+  window.location.hash = to;
+  // Mesmo caminho com outra query (ex.: "Cursos" no menu estando em /cursos?q=react): nenhum efeito de rota vai rolar
+  // a página nem consumir a seção pendente, então isso é feito aqui. O catálogo reage ao evento hashchange.
+  if (samePath) flushScroll();
 }
 
 /** Vai para outro endereço substituindo o atual no histórico (o botão voltar não retorna à página de origem). */
@@ -75,11 +84,14 @@ export function replacePath(to: string): void {
   window.location.replace(`#${to}`);
 }
 
-/** Deve ser chamado uma vez no layout: rola a página após cada mudança de rota. */
+/** Deve ser chamado uma vez no layout: rola a página e leva o foco ao título após cada mudança de rota. */
 export function useScrollOnNavigate(): void {
   const path = usePath();
+  const previous = useRef<string | null>(null);
   useEffect(() => {
-    flushScroll();
+    // Na primeira carga não se mexe no foco: só nas trocas de rota seguintes.
+    flushScroll(previous.current !== null && previous.current !== path);
+    previous.current = path;
   }, [path]);
 }
 

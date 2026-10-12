@@ -61,6 +61,7 @@
   --border-soft: var(--color-paper-200);
   --link: var(--color-primary-600);
   --focus: var(--color-primary-500);
+  --danger: var(--color-danger-600);
 }
 
 /* Seções escuras redefinem apenas os tokens semânticos. */
@@ -74,6 +75,7 @@
   --border-soft: color-mix(in srgb, white 10%, transparent);
   --link: var(--color-primary-400);
   --focus: var(--color-accent-400);
+  --danger: var(--color-danger-400);
   background: var(--bg);
   color: var(--text);
 }

@@ -44,7 +44,9 @@ export function Header() {
   const isCurrent = (item: NavItem) => {
     if (!item.route) return false;
     const route = getRoute(item.route);
-    return route.implemented && route.path === normalized;
+    if (!route.implemented) return false;
+    // A página inicial só é "atual" nela mesma; as demais também valem nas páginas filhas (ex.: detalhes de um curso).
+    return route.path === '/' ? normalized === '/' : normalized === route.path || normalized.startsWith(`${route.path}/`);
   };
 
   const renderItem = (item: NavItem) => (

@@ -69,7 +69,7 @@
 }
 .menu-toggle:hover { background: color-mix(in srgb, white 8%, transparent); }
 
-.mobile-menu { border-top: 1px solid var(--border-soft); background: var(--color-ink-900); }
+.mobile-menu { max-height: calc(100vh - var(--header-h)); max-height: calc(100dvh - var(--header-h)); overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--border-soft); background: var(--color-ink-900); }
 .mobile-menu__inner { display: grid; gap: var(--space-5); padding-block: var(--space-4) var(--space-6); }
 .mobile-menu__list .nav__link { width: 100%; min-height: 52px; font-size: var(--text-lg); border-radius: var(--radius-md); }
 .mobile-menu__actions { display: grid; gap: var(--space-3); }

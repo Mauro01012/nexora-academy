@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
+import { focusPageHeading } from '@/app/focus';
 import { AppLink, navigate, usePath } from '@/app/router';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Icon } from '@/components/ui/Icon';
@@ -30,6 +32,12 @@ export function AdminShell({ title, children }: { title: string; children: React
   const { isAdmin, enter, leave } = useAdmin();
   const path = usePath();
   useDocumentTitle(`${title} (admin)`);
+
+  const wasAdmin = useRef(isAdmin);
+  useEffect(() => {
+    if (isAdmin && !wasAdmin.current) focusPageHeading();
+    wasAdmin.current = isAdmin;
+  }, [isAdmin]);
 
   if (!isAdmin) {
     return (
