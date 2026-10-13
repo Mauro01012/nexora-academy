@@ -1,10 +1,17 @@
 /*
- * Tokens de design.
- * As cores da paleta (--color-*) e as fontes (--font-*) são publicadas a partir de src/config/brand.ts.
- * Aqui ficam escala tipográfica, espaçamento, raios, sombras, movimento e os tokens semânticos.
+ * Tokens de design — fonte única dos valores visuais reutilizáveis.
+ *
+ * Camadas, da mais bruta à mais semântica:
+ *   1. Paleta  (--color-*, --font-*)  publicada por src/config/brand.ts; nunca escreva hex fora de lá.
+ *   2. Escalas (--text-*, --space-*, --radius-*, --shadow-*, --dur-*, --control-*, --z-*)  definidas aqui.
+ *   3. Semânticos (--bg, --text, --action, --success...)  é o que componentes e páginas devem consumir.
+ * Seções escuras ou de marca redefinem só a camada 3, então os componentes funcionam em qualquer superfície.
  */
 :root {
+  /* ---------- Escalas ---------- */
+
   /* Tipografia */
+  --text-2xs: 0.6875rem;
   --text-xs: 0.8125rem;
   --text-sm: 0.9375rem;
   --text-md: 1rem;
@@ -16,6 +23,13 @@
   --leading-tight: 1.08;
   --leading-snug: 1.25;
   --leading-body: 1.6;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --tracking-tight: -0.015em;
+  --tracking-wide: 0.06em;
+  --tracking-caps: 0.1em;
 
   /* Espaçamento */
   --space-1: 0.25rem;
@@ -29,13 +43,16 @@
   --space-9: clamp(4rem, 3rem + 5vw, 7.5rem);
 
   /* Bordas e raios */
+  --border-width: 1px;
+  --border-width-strong: 1.5px;
+  --radius-xs: 4px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;
   --radius-xl: 28px;
   --radius-pill: 999px;
 
-  /* Sombras */
+  /* Sombras: tinta da marca, nunca preto puro */
   --shadow-sm: 0 1px 2px rgb(11 19 36 / 0.08), 0 1px 1px rgb(11 19 36 / 0.04);
   --shadow-md: 0 8px 24px -8px rgb(11 19 36 / 0.22);
   --shadow-lg: 0 24px 60px -20px rgb(11 19 36 / 0.45);
@@ -46,33 +63,113 @@
   --dur: 280ms;
   --dur-slow: 700ms;
 
+  /* Alturas de controles interativos (alvo de toque mínimo: 44px) */
+  --control-sm: 38px;
+  --control-md: 44px;
+  --control-field: 48px;
+  --control-lg: 54px;
+
+  /* Foco */
+  --ring-width: 3px;
+  --ring-offset: 3px;
+  --ring-offset-tight: 2px;
+
+  /* Camadas */
+  --z-header: 50;
+  --z-overlay: 100;
+  --z-skip: 120;
+
   /* Layout */
   --container: 1200px;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
   --header-h: 72px;
 
-  /* Tokens semânticos (tema claro, padrão) */
+  /* ---------- Semânticos (tema claro, padrão) ---------- */
+
+  /* Superfícies e texto */
   --bg: var(--color-paper-50);
   --bg-alt: var(--color-paper-100);
-  --surface: #ffffff;
+  --surface: var(--color-white);
   --text: var(--color-ink-900);
   --text-muted: var(--color-slate-600);
+  --text-on-dark: var(--color-ink-50);
   --border: var(--color-paper-300);
   --border-soft: var(--color-paper-200);
   --link: var(--color-primary-600);
   --focus: var(--color-primary-500);
+  --overlay: color-mix(in srgb, var(--color-ink-950) 60%, transparent);
+
+  /* Ação primária (botões, seleção, progresso) */
+  --action: var(--color-primary-600);
+  --action-hover: var(--color-primary-700);
+  --action-ink: var(--color-white);
+  /* Chamada de destaque (uma por tela) */
+  --cta: var(--color-accent-500);
+  --cta-hover: var(--color-accent-400);
+  --cta-ink: var(--color-ink-950);
+  --cta-glow: color-mix(in srgb, var(--color-accent-500) 70%, transparent);
+
+  /* Estados de feedback: cor (--x), fundo suave (--x-bg) e texto sobre o fundo (--x-ink) */
   --danger: var(--color-danger-600);
+  --danger-bg: color-mix(in srgb, var(--danger) 7%, var(--color-white));
+  --success: var(--color-mint-600);
+  --success-bg: color-mix(in srgb, var(--color-mint-400) 14%, var(--color-white));
+  --success-ink: var(--color-mint-600);
+  --warning: var(--color-amber-400);
+  --warning-bg: color-mix(in srgb, var(--color-amber-400) 18%, var(--color-white));
+  --warning-ink: var(--color-amber-700);
+  --info: var(--color-primary-600);
+  --info-bg: color-mix(in srgb, var(--color-primary-500) 12%, var(--color-white));
+  --info-ink: var(--color-primary-700);
+
+  /* Tons de categoria (badges, avatares, capas): defina data-tone="..." no elemento.
+     --tone é a cor cheia; --tone-bg e --tone-ink formam um par legível (contraste mínimo 4,5:1). */
+  --tone: var(--color-primary-500);
+  --tone-bg: var(--info-bg);
+  --tone-ink: var(--color-primary-700);
 }
+
+[data-tone='primary'] {
+  --tone: var(--color-primary-500);
+  --tone-bg: color-mix(in srgb, var(--color-primary-500) 14%, var(--color-white));
+  --tone-ink: var(--color-primary-700);
+}
+[data-tone='mint'] {
+  --tone: var(--color-mint-400);
+  --tone-bg: color-mix(in srgb, var(--color-mint-400) 14%, var(--color-white));
+  --tone-ink: var(--color-mint-600);
+}
+[data-tone='accent'] {
+  --tone: var(--color-accent-500);
+  --tone-bg: color-mix(in srgb, var(--color-accent-500) 14%, var(--color-white));
+  --tone-ink: var(--color-accent-700);
+}
+[data-tone='amber'] {
+  --tone: var(--color-amber-400);
+  --tone-bg: color-mix(in srgb, var(--color-amber-400) 20%, var(--color-white));
+  --tone-ink: var(--color-amber-700);
+}
+[data-tone='slate'] {
+  --tone: var(--color-slate-500);
+  --tone-bg: color-mix(in srgb, var(--color-slate-500) 16%, var(--color-white));
+  --tone-ink: var(--color-ink-600);
+}
+
+/* Tons de feedback: reaproveitam os tokens semânticos, então seguem a marca e o contraste já validado. */
+[data-tone='success'] { --tone: var(--success); --tone-bg: var(--success-bg); --tone-ink: var(--success-ink); }
+[data-tone='warning'] { --tone: var(--warning); --tone-bg: var(--warning-bg); --tone-ink: var(--warning-ink); }
+[data-tone='danger']  { --tone: var(--danger);  --tone-bg: var(--danger-bg);  --tone-ink: var(--danger); }
+[data-tone='info']    { --tone: var(--info);    --tone-bg: var(--info-bg);    --tone-ink: var(--info-ink); }
 
 /* Seções escuras redefinem apenas os tokens semânticos. */
 .surface-dark {
   --bg: var(--color-ink-900);
   --bg-alt: var(--color-ink-800);
   --surface: var(--color-ink-800);
-  --text: #f3f5fa;
+  --text: var(--text-on-dark);
   --text-muted: var(--color-slate-300);
-  --border: color-mix(in srgb, white 18%, transparent);
-  --border-soft: color-mix(in srgb, white 10%, transparent);
+  --border: color-mix(in srgb, var(--color-white) 18%, transparent);
+  --border-soft: color-mix(in srgb, var(--color-white) 10%, transparent);
   --link: var(--color-primary-400);
   --focus: var(--color-accent-400);
   --danger: var(--color-danger-400);
@@ -86,10 +183,10 @@
 /* Bloco de marca (azul primário) */
 .surface-brand {
   --bg: var(--color-primary-600);
-  --text: #ffffff;
-  --text-muted: #dbe3ff;
-  --border: color-mix(in srgb, white 35%, transparent);
-  --focus: #ffffff;
+  --text: var(--color-white);
+  --text-muted: color-mix(in srgb, var(--color-white) 90%, var(--color-primary-600));
+  --border: color-mix(in srgb, var(--color-white) 35%, transparent);
+  --focus: var(--color-white);
   background: var(--bg);
   color: var(--text);
 }

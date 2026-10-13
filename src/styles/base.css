@@ -14,8 +14,8 @@ body {
   font-family: var(--font-body);
   font-size: var(--text-md);
   line-height: var(--leading-body);
-  color: var(--color-ink-900);
-  background: var(--color-paper-50);
+  color: var(--text);
+  background: var(--bg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -30,10 +30,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* Foco visível e consistente */
 :focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 3px;
+  outline: var(--ring-width) solid var(--focus);
+  outline-offset: var(--ring-offset);
   border-radius: var(--radius-sm);
 }
+::selection { background: color-mix(in srgb, var(--color-primary-500) 28%, transparent); }
 main:focus, section:focus, [tabindex='-1']:focus { outline: none; }
 
 .visually-hidden {
@@ -50,11 +51,11 @@ main:focus, section:focus, [tabindex='-1']:focus { outline: none; }
   position: fixed;
   top: var(--space-3);
   left: var(--space-3);
-  z-index: 100;
+  z-index: var(--z-skip);
   padding: var(--space-3) var(--space-4);
-  background: var(--color-accent-500);
-  color: var(--color-ink-950);
-  font-weight: 600;
+  background: var(--cta);
+  color: var(--cta-ink);
+  font-weight: var(--weight-semibold);
   border-radius: var(--radius-md);
   transform: translateY(-200%);
 }
@@ -70,27 +71,27 @@ main:focus, section:focus, [tabindex='-1']:focus { outline: none; }
 /* Tipografia utilitária */
 .display {
   font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.015em;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   text-wrap: balance;
 }
-.lead { font-size: var(--text-lg); color: var(--text-muted); max-width: 56ch; }
+.lead { font-size: var(--text-lg); color: var(--text-muted); max-width: 56ch; text-wrap: pretty; }
 
 .eyebrow {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   font-size: var(--text-xs);
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--text-muted);
 }
 .eyebrow__dot {
   width: 8px; height: 8px;
   border-radius: 50%;
-  background: var(--color-accent-500);
+  background: var(--cta);
 }
 
 /* Revelação ao rolar: só atua com JS ativo e sem preferência por movimento reduzido */

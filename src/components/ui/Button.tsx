@@ -22,12 +22,12 @@ interface Visual {
 const classes = ({ variant = 'primary', size = 'md', fullWidth, className = '' }: Visual) =>
   ['btn', `btn--${variant}`, `btn--${size}`, fullWidth ? 'btn--block' : '', className].filter(Boolean).join(' ');
 
-function Content({ icon, arrow, children }: Pick<Visual, 'icon' | 'arrow' | 'children'>) {
+function Content({ icon, arrow, loading, children }: Pick<Visual, 'icon' | 'arrow' | 'children'> & { loading?: boolean }) {
   return (
     <>
-      {icon ? <Icon name={icon} size={18} /> : null}
+      {loading ? <span className="btn__spinner" aria-hidden="true" /> : icon ? <Icon name={icon} size={18} /> : null}
       <span>{children}</span>
-      {arrow ? <Icon name="arrowRight" size={18} className="btn__arrow" /> : null}
+      {arrow && !loading ? <Icon name="arrowRight" size={18} className="btn__arrow" /> : null}
     </>
   );
 }
@@ -40,12 +40,23 @@ export function Button({
   fullWidth,
   className,
   children,
+  loading = false,
+  disabled,
   type = 'button',
   ...rest
-}: Visual & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'children'>) {
+}: Visual & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className' | 'children'> & {
+  /** Ação em andamento: troca o ícone por um indicador, bloqueia novos cliques e informa `aria-busy` aos leitores de tela. */
+  loading?: boolean;
+}) {
   return (
-    <button type={type} className={classes({ variant, size, fullWidth, className, children })} {...rest}>
-      <Content icon={icon} arrow={arrow}>
+    <button
+      type={type}
+      className={classes({ variant, size, fullWidth, className, children })}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      {...rest}
+    >
+      <Content icon={icon} arrow={arrow} loading={loading}>
         {children}
       </Content>
     </button>

@@ -138,7 +138,7 @@ src/
 
 - **Marca:** edite `src/config/brand.ts` (nome, slogan, descrição, cores, fontes, logotipo, e-mail e textos de demonstração).
   As cores viram variáveis CSS (`--color-*`) na inicialização; os tokens semânticos (`--bg`, `--text`, `--danger`...) estão em
-  `src/styles/tokens.css`. Para testar rapidamente, use `#/admin/marca` (vale só no seu navegador).
+  `src/styles/tokens.css`. O guia de uso dos tokens e dos estados dos componentes está em [`DESIGN-SYSTEM.md`](DESIGN-SYSTEM.md). Para testar rapidamente, use `#/admin/marca` (vale só no seu navegador).
 - **Cursos, categorias, instrutoria e depoimentos iniciais:** arquivos em `src/data/`. `courses.ts` tem 12 cursos, 2 por
   categoria. O campo `price` é opcional; sem ele o curso aparece como "Gratuito".
 - **Nova página:** crie em `src/pages/`, registre em `src/app/pages.tsx` e marque `implemented: true` em `src/app/routes.ts`.

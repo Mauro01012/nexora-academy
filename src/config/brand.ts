@@ -14,18 +14,22 @@ export const brand = {
 
   colors: {
     // Base escura (tinta)
+    'ink-50': '#F3F5FA', // texto principal sobre superfícies escuras
+    'ink-100': '#D7DEF0', // texto de código sobre superfícies escuras
     'ink-950': '#070D1A',
     'ink-900': '#0B1324',
     'ink-800': '#121C33',
     'ink-700': '#1C2A48',
     'ink-600': '#2B3B5E',
     // Base clara (papel)
+    white: '#FFFFFF',
     'paper-50': '#FDFCF8',
     'paper-100': '#F6F2E9',
     'paper-200': '#EAE4D5',
     'paper-300': '#D8D0BC',
     // Texto auxiliar
     'slate-600': '#4A5570',
+    'slate-500': '#8A98B8',
     'slate-300': '#AEB8D0',
     // Primária (confiança, ação)
     'primary-400': '#7F9BFF',
@@ -36,10 +40,12 @@ export const brand = {
     'accent-400': '#FF8A63',
     'accent-500': '#FF6A3D',
     'accent-600': '#E5502A',
+    'accent-700': '#9A2F12', // texto sobre fundos tingidos de acento
     // Apoio (progresso, sucesso, destaque)
     'mint-400': '#4FD1A1',
     'mint-600': '#0F7A59',
     'amber-400': '#F2B84B',
+    'amber-700': '#7A5208', // texto sobre fundos tingidos de âmbar
     // Estado de erro: independe da cor de destaque da marca e mantém contraste mínimo de 4,5:1
     'danger-600': '#B42318',
     'danger-400': '#FF9C8F',

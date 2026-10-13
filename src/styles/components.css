@@ -1,14 +1,17 @@
-/* ---------- Botões ---------- */
+/* ---------- Botões ----------
+ * Variantes: primary, accent, secondary, ghost, danger. Tamanhos: md (padrão) e lg.
+ * Estados: hover, focus-visible (anel herdado de base.css), active, disabled e loading (aria-busy).
+ */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: 44px;
+  min-height: var(--control-md);
   padding: 0 var(--space-5);
-  border: 1.5px solid transparent;
+  border: var(--border-width-strong) solid transparent;
   border-radius: var(--radius-md);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   font-size: var(--text-sm);
   line-height: 1;
   white-space: nowrap;
@@ -16,118 +19,159 @@
     border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease),
     box-shadow var(--dur-fast) var(--ease);
 }
-.btn--lg { min-height: 54px; padding: 0 var(--space-6); font-size: var(--text-md); }
+.btn:focus-visible { outline-offset: var(--ring-offset-tight); }
+.btn--lg { min-height: var(--control-lg); padding: 0 var(--space-6); font-size: var(--text-md); }
 .btn--block { width: 100%; }
-.btn:active { transform: translateY(1px); }
-.btn[disabled], .btn[aria-disabled='true'] { opacity: 0.5; pointer-events: none; }
+.btn:active { transform: translateY(1px); box-shadow: none; }
+
+/* Desabilitado e em carregamento não recebem ponteiro; o cursor é indicado no próprio rótulo do estado. */
+.btn:disabled, .btn[aria-disabled='true'] { opacity: 0.5; pointer-events: none; box-shadow: none; }
+/* Em carregamento o botão fica desabilitado, mas mantém a aparência cheia: o indicador já comunica o estado. */
+.btn[aria-busy='true'] { opacity: 1; pointer-events: none; cursor: progress; }
+
 /* Rótulos ficam em uma linha; só quebram quando o espaço útil equivale a menos de 320px com a fonte padrão
-   (ex.: fonte do navegador muito ampliada), em vez de estourar a tela. */
+   (ex.: fonte do navegador muito ampliada) ou dentro de formulários, em vez de estourar a tela. */
 @media (max-width: 19.9375em) {
   .btn { max-width: 100%; padding-block: var(--space-2); line-height: 1.2; text-align: center; white-space: normal; }
 }
+:is(.auth__panel, .admin-form) .btn { max-width: 100%; padding-block: var(--space-2); line-height: 1.25; text-align: center; white-space: normal; }
 
 .btn__arrow { transition: transform var(--dur) var(--ease); }
 .btn:hover .btn__arrow { transform: translateX(4px); }
 
-.btn--primary { background: var(--color-primary-600); color: #fff; }
-.btn--primary:hover { background: var(--color-primary-700); box-shadow: var(--shadow-md); }
+.btn__spinner {
+  flex: none;
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+/* Com movimento reduzido o indicador gira devagar em vez de parar: ele precisa continuar comunicando "em andamento". */
+@media (prefers-reduced-motion: reduce) {
+  .btn__spinner { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
+}
 
-.btn--accent { background: var(--color-accent-500); color: var(--color-ink-950); }
-.btn--accent:hover { background: var(--color-accent-400); box-shadow: 0 10px 28px -10px rgb(255 106 61 / 0.7); }
+.btn--primary { background: var(--action); color: var(--action-ink); }
+.btn--primary:hover { background: var(--action-hover); box-shadow: var(--shadow-md); }
+.btn--primary:active { background: color-mix(in srgb, var(--action-hover) 85%, var(--color-ink-950)); }
+
+.btn--accent { background: var(--cta); color: var(--cta-ink); }
+.btn--accent:hover { background: var(--cta-hover); box-shadow: 0 10px 28px -10px var(--cta-glow); }
+.btn--accent:active { background: var(--color-accent-600); }
 
 .btn--secondary { background: transparent; color: var(--text); border-color: var(--border); }
 .btn--secondary:hover { background: color-mix(in srgb, var(--text) 8%, transparent); border-color: var(--text-muted); }
+.btn--secondary:active { background: color-mix(in srgb, var(--text) 14%, transparent); }
 
 .btn--ghost { background: transparent; color: var(--text); }
 .btn--ghost:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+.btn--ghost:active { background: color-mix(in srgb, var(--text) 14%, transparent); }
 
 /* Ações destrutivas (excluir, cancelar inscrição). A cor vem do token --danger, que mantém contraste mínimo de 4,5:1. */
-.btn--danger { background: var(--danger); color: #fff; }
+.btn--danger { background: var(--danger); color: var(--color-white); }
 .btn--danger:hover { background: color-mix(in srgb, var(--danger) 82%, black); box-shadow: var(--shadow-md); }
+.btn--danger:active { background: color-mix(in srgb, var(--danger) 70%, black); }
 .btn--text-danger { color: var(--danger); }
 
-/* ---------- Campos de formulário ---------- */
-.field { display: grid; gap: var(--space-2); }
-.field__label { font-size: var(--text-sm); font-weight: 600; color: var(--text); }
+/* ---------- Campos de formulário ----------
+ * Estados: hover, focus-visible (anel suave), inválido (aria-invalid), somente leitura e desabilitado.
+ */
+.field { display: grid; gap: var(--space-2); min-width: 0; }
+.field__label { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--text); }
 .input {
   width: 100%;
-  min-height: 48px;
+  min-height: var(--control-field);
   padding: 0 var(--space-4);
   font: inherit;
   color: var(--text);
   background: var(--surface);
-  border: 1.5px solid var(--border);
+  border: var(--border-width-strong) solid var(--border);
   border-radius: var(--radius-md);
-  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease);
 }
 .input::placeholder { color: color-mix(in srgb, var(--text-muted) 88%, transparent); }
-.input:hover { border-color: var(--text-muted); }
+.input:hover:not(:disabled, [readonly]) { border-color: var(--text-muted); }
 .input:focus-visible {
   outline: none;
-  border-color: var(--color-primary-500);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary-500) 25%, transparent);
+  border-color: var(--focus);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--focus) 25%, transparent);
 }
-.field { min-width: 0; }
-.field--error .input { border-color: var(--danger); }
+.input[readonly] { background: var(--bg-alt); }
+.input:disabled { color: var(--text-muted); background: var(--bg-alt); border-style: dashed; cursor: not-allowed; }
+.field:has(.input:disabled) .field__label { color: var(--text-muted); }
+.input[aria-invalid='true'], .field--error .input { border-color: var(--danger); }
+.input[aria-invalid='true']:focus-visible, .field--error .input:focus-visible { box-shadow: 0 0 0 4px color-mix(in srgb, var(--danger) 22%, transparent); }
 .field__hint { font-size: var(--text-xs); color: var(--text-muted); }
-.field__error { font-size: var(--text-xs); font-weight: 600; color: var(--danger); }
+.field__error { font-size: var(--text-xs); font-weight: var(--weight-semibold); color: var(--danger); }
 
 /* ---------- Confirmação após uma ação ---------- */
-.flash { padding: var(--space-3) var(--space-4); font-weight: 600; font-size: var(--text-sm); color: var(--color-mint-600); background: color-mix(in srgb, var(--color-mint-600) 10%, white); border: 1px solid var(--color-mint-600); border-radius: var(--radius-md); }
+.flash {
+  padding: var(--space-3) var(--space-4);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--success-ink);
+  background: var(--success-bg);
+  border: var(--border-width) solid var(--success);
+  border-radius: var(--radius-md);
+}
 
 /* ---------- Cards ---------- */
 .card {
   background: var(--surface);
-  border: 1px solid var(--border-soft);
+  border: var(--border-width) solid var(--border-soft);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   box-shadow: var(--shadow-sm);
 }
-.card--interactive { transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
-.card--interactive:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.card--interactive { transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease); }
+.card--interactive:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--border); }
+.card--interactive:active { transform: translateY(-1px); }
 
-/* ---------- Badges, chips, avaliação ---------- */
+/* ---------- Badges, chips, avaliação ----------
+ * O par de cores do badge vem de data-tone (ver tokens.css): primary, mint, accent, amber, slate,
+ * mais os de feedback success, warning, danger e info.
+ */
 .badge {
   display: inline-flex;
   align-items: center;
   padding: 0.25rem 0.65rem;
   border-radius: var(--radius-pill);
   font-size: var(--text-xs);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   line-height: 1.3;
   color: var(--tone-ink, var(--text));
   background: var(--tone-bg, var(--border-soft));
 }
-[data-tone='primary'] { --tone: var(--color-primary-500); --tone-bg: #dfe6ff; --tone-ink: var(--color-primary-700); }
-[data-tone='mint']    { --tone: var(--color-mint-400);    --tone-bg: #d3f4e7; --tone-ink: var(--color-mint-600); }
-[data-tone='accent']  { --tone: var(--color-accent-500);  --tone-bg: #ffe0d5; --tone-ink: #9a2f12; }
-[data-tone='amber']   { --tone: var(--color-amber-400);   --tone-bg: #fbeacb; --tone-ink: #7a5208; }
-[data-tone='slate']   { --tone: #8a98b8;                  --tone-bg: #e2e6f0; --tone-ink: #2b3b5e; }
 
-.rating { display: inline-flex; align-items: center; gap: 0.25rem; font-weight: 600; }
+.rating { display: inline-flex; align-items: center; gap: var(--space-1); font-weight: var(--weight-semibold); }
 .rating svg { color: var(--color-amber-400); }
 
 .chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .chips li {
   padding: 0.2rem 0.65rem;
   font-size: var(--text-xs);
-  font-weight: 500;
-  border: 1px solid var(--border);
+  font-weight: var(--weight-medium);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-pill);
   color: var(--text-muted);
 }
 
-.tag-soon {
-  margin-left: var(--space-2);
+/* Etiquetas curtas em caixa-alta (sobre âmbar): "em breve", "demonstração", "Aluno". */
+.tag-soon, .student-link__tag, .tag-demo {
   padding: 0.1rem 0.5rem;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-ink-950);
   background: var(--color-amber-400);
   border-radius: var(--radius-pill);
 }
+.tag-soon { margin-left: var(--space-2); }
+.tag-demo { justify-self: start; }
 
 .meta-list { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-5); font-size: var(--text-sm); color: var(--text-muted); }
 .meta-list li { display: inline-flex; align-items: center; gap: var(--space-2); }
@@ -140,10 +184,10 @@
 .logo__tile { fill: var(--color-ink-700); }
 .surface-light .logo__tile { fill: var(--color-ink-900); }
 .logo__glyph { fill: none; stroke: var(--color-paper-100); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-.logo__node { fill: var(--color-accent-500); }
+.logo__node { fill: var(--cta); }
 .logo__text { display: grid; line-height: 1; }
-.logo__word { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; letter-spacing: 0.06em; }
-.logo__sub { margin-top: 3px; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.32em; color: var(--text-muted); }
+.logo__word { font-family: var(--font-display); font-weight: var(--weight-bold); font-size: 1.25rem; letter-spacing: var(--tracking-wide); }
+.logo__sub { margin-top: 3px; font-size: 0.625rem; font-weight: var(--weight-semibold); letter-spacing: 0.32em; color: var(--text-muted); }
 
 /* ---------- Capas e monogramas (SVG) ---------- */
 .cover { --t: var(--tone, var(--color-primary-500)); width: 100%; height: 100%; }
@@ -159,7 +203,7 @@
 .monogram__shape { fill: var(--color-ink-900); }
 .monogram__text {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   font-size: 120px;
   letter-spacing: -0.03em;
   fill: var(--color-ink-900);

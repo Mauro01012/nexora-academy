@@ -1,7 +1,7 @@
 import type { IconName } from '@/components/ui/Icon';
 
 export type CategoryId = 'web' | 'dados' | 'design' | 'seguranca' | 'ia' | 'negocios';
-export type Tone = 'primary' | 'mint' | 'accent' | 'amber' | 'slate';
+export type Tone = 'primary' | 'mint' | 'accent' | 'amber' | 'slate' | 'success' | 'warning' | 'danger' | 'info';
 export type Level = 'Iniciante' | 'Intermediário' | 'Avançado';
 
 export interface Category {
