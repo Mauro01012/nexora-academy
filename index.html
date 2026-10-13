@@ -15,10 +15,29 @@
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <style>
+      /* Só o suficiente para a tela de carregamento e o aviso sem JavaScript; o restante vem de src/styles. */
+      .boot { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 100vh; margin: 0; padding: 24px; background: #0b1324; font: 500 16px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; color: #f3f5fa; text-align: center; }
+      .boot__spinner { width: 20px; height: 20px; border: 3px solid rgb(255 255 255 / 0.25); border-top-color: #ff6a3d; border-radius: 50%; animation: boot-spin 0.8s linear infinite; }
+      @keyframes boot-spin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { .boot__spinner { animation-duration: 3s; } }
+    </style>
     <title>NEXORA ACADEMY — Conhecimento com método. Carreira com clareza.</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Estado de carregamento: o React substitui este bloco assim que o aplicativo inicia. -->
+      <div class="boot" role="status" aria-live="polite">
+        <span class="boot__spinner" aria-hidden="true"></span>
+        <span>Carregando…</span>
+      </div>
+    </div>
+    <noscript>
+      <style>
+        .boot:not(.boot--static) { display: none; }
+      </style>
+      <p class="boot boot--static">Este site precisa de JavaScript para funcionar. Ative o JavaScript no navegador e recarregue a página.</p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

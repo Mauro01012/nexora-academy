@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from 'react';
+import { focusPageHeading } from '@/app/focus';
 import type { KeyboardEvent, ReactNode } from 'react';
 
 interface ConfirmDialogProps {
@@ -22,7 +23,11 @@ export function ConfirmDialog({ open, title, children, confirmLabel, cancelLabel
     if (!open) return;
     const opener = document.activeElement as HTMLElement | null;
     cancelRef.current?.focus();
-    return () => opener?.focus?.();
+    return () => {
+      // Se a ação removeu quem abriu o diálogo (ex.: o cartão excluído), o foco vai ao título da página em vez de se perder.
+      if (opener?.isConnected) opener.focus();
+      else focusPageHeading();
+    };
   }, [open]);
 
   if (!open) return null;

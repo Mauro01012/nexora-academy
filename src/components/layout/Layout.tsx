@@ -2,6 +2,7 @@ import type { MouseEvent, ReactNode } from 'react';
 import { usePath, useScrollOnNavigate } from '@/app/router';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
+import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 export function Layout({ children }: { children: ReactNode }) {
   useScrollOnNavigate();
@@ -24,7 +25,7 @@ export function Layout({ children }: { children: ReactNode }) {
       </a>
       {isAdmin ? null : <Header />}
       <main id="conteudo" tabIndex={-1}>
-        {children}
+        <ErrorBoundary resetKey={path}>{children}</ErrorBoundary>
       </main>
       {isAdmin ? null : <Footer />}
     </>

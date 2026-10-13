@@ -23,7 +23,9 @@ function load(): Course[] {
           valid.push(item);
         }
       }
-      return valid;
+      // Lista vazia é uma escolha válida (o admin excluiu tudo). Lista com itens em que nenhum serve é dado corrompido:
+      // volta ao catálogo inicial em vez de deixar o site vazio sem explicação.
+      if (valid.length > 0 || raw.courses.length === 0) return valid;
     }
   } catch {
     /* armazenamento indisponível ou corrompido: usa os dados iniciais */

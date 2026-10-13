@@ -113,3 +113,6 @@ main:focus, section:focus, [tabindex='-1']:focus { outline: none; }
     scroll-behavior: auto !important;
   }
 }
+
+/* Código inline (caminhos, e-mails) não tem ponto de quebra: sem isso estoura a tela com fonte grande. */
+code { overflow-wrap: anywhere; }

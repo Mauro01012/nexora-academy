@@ -28,7 +28,8 @@ export function Header() {
       }
     };
     const onResize = () => {
-      if (window.innerWidth >= 960) setOpen(false);
+      // Mesmo limiar do CSS (60em = 960px com a fonte padrão), para o menu fechar quando o layout de desktop aparece.
+      if (window.matchMedia('(min-width: 60em)').matches) setOpen(false);
     };
     document.addEventListener('keydown', onKey);
     window.addEventListener('resize', onResize);
@@ -44,7 +45,9 @@ export function Header() {
   const isCurrent = (item: NavItem) => {
     if (!item.route) return false;
     const route = getRoute(item.route);
-    return route.implemented && route.path === normalized;
+    if (!route.implemented) return false;
+    // A página inicial só é "atual" nela mesma; as demais também valem nas páginas filhas (ex.: detalhes de um curso).
+    return route.path === '/' ? normalized === '/' : normalized === route.path || normalized.startsWith(`${route.path}/`);
   };
 
   const renderItem = (item: NavItem) => (

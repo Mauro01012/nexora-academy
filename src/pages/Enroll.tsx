@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { focusPageHeading } from '@/app/focus';
 import { RequireAuth } from '@/components/auth/RequireAuth';
 import { Badge } from '@/components/ui/Badge';
 import { Button, ButtonLink } from '@/components/ui/Button';
@@ -16,6 +17,14 @@ function EnrollFlow({ course }: { course: Course }) {
   const { user, enroll } = useAuth();
   const [justEnrolled, setJustEnrolled] = useState(false);
   const category = categoryById(course.category);
+
+  // O botão de confirmar some da tela: leva o foco ao título, que passa a dizer "Inscrição confirmada".
+  const firstRender = useRef(true);
+  useEffect(() => {
+    if (firstRender.current) firstRender.current = false;
+    else if (justEnrolled) focusPageHeading();
+  }, [justEnrolled]);
+
   if (!user || !category) return null;
   const enrolled = user.enrollments.some((e) => e.courseId === course.id);
 

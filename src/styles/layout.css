@@ -69,16 +69,16 @@
 }
 .menu-toggle:hover { background: color-mix(in srgb, white 8%, transparent); }
 
-.mobile-menu { border-top: 1px solid var(--border-soft); background: var(--color-ink-900); }
+.mobile-menu { max-height: calc(100vh - var(--header-h)); max-height: calc(100dvh - var(--header-h)); overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--border-soft); background: var(--color-ink-900); }
 .mobile-menu__inner { display: grid; gap: var(--space-5); padding-block: var(--space-4) var(--space-6); }
 .mobile-menu__list .nav__link { width: 100%; min-height: 52px; font-size: var(--text-lg); border-radius: var(--radius-md); }
 .mobile-menu__actions { display: grid; gap: var(--space-3); }
 
-@media (max-width: 959px) {
+@media (max-width: 59.9375em) {
   .nav, .site-header__actions { display: none; }
   .menu-toggle { display: inline-flex; }
 }
-@media (min-width: 960px) {
+@media (min-width: 60em) {
   .mobile-menu { display: none !important; }
 }
 
@@ -112,12 +112,12 @@
 .site-footer__col a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
 .site-footer__legal { padding-block: var(--space-5); border-top: 1px solid var(--border-soft); font-size: var(--text-xs); color: var(--text-muted); }
 
-@media (max-width: 899px) {
-  .site-footer__grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 56.1875em) {
+  .site-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .site-footer__about { grid-column: 1 / -1; }
 }
-@media (max-width: 519px) {
-  .site-footer__grid { grid-template-columns: 1fr; }
+@media (max-width: 32.4375em) {
+  .site-footer__grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---------- Página de aviso (rotas planejadas) ---------- */
@@ -131,5 +131,12 @@
   border-radius: var(--radius-md);
 }
 .page-notice__title { font-size: var(--text-3xl); }
-.page-notice__text { max-width: 58ch; color: var(--text-muted); font-size: var(--text-lg); }
+.page-notice__text { overflow-wrap: anywhere; max-width: 58ch; color: var(--text-muted); font-size: var(--text-lg); }
 .page-notice__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-3); }
+
+/* Espaço útil equivalente a menos de 320px com a fonte padrão (fonte do navegador muito ampliada): margens menores,
+   porque as medidas em rem crescem junto com o texto e consumiriam a tela inteira. */
+@media (max-width: 19.9375em) {
+  :root { --gutter: 0.75rem; }
+  .auth__panel, .student__summary, .catalog-filters, .admin-form, .admin-card { padding: var(--space-4); }
+}

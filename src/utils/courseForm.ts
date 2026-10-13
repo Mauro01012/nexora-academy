@@ -36,6 +36,15 @@ export const parseTags = (text: string): string[] =>
 
 const num = (text: string): number => (text.trim() === '' ? NaN : Number(text.trim().replace(',', '.')));
 
+/**
+ * Número inteiro digitado em português: aceita ponto como separador de milhar ("2.000" = 2000).
+ * Sem isso, "2.000" seria lido como 2 em silêncio. Vale só para campos inteiros; a nota usa `num` (4,5 ou 4.5).
+ */
+const int = (text: string): number => {
+  const t = text.trim();
+  return /^\d{1,3}(\.\d{3})+$/.test(t) ? Number(t.replace(/\./g, '')) : num(t);
+};
+
 export function validateCourseForm(v: CourseFormValues, others: Course[]): CourseFormErrors {
   const e: CourseFormErrors = {};
   const title = v.title.trim();
@@ -49,16 +58,16 @@ export function validateCourseForm(v: CourseFormValues, others: Course[]): Cours
   if (summary.length < 20 || summary.length > 300) e.summary = 'Descreva o curso em 20 a 300 caracteres.';
   if (!categories.some((c) => c.id === v.category)) e.category = 'Escolha uma categoria.';
   if (!levels.includes(v.level as Level)) e.level = 'Escolha um nível.';
-  const hours = num(v.hours);
+  const hours = int(v.hours);
   if (!Number.isInteger(hours) || hours < 1 || hours > 500) e.hours = 'Informe um número inteiro de 1 a 500.';
-  const lessons = num(v.lessons);
+  const lessons = int(v.lessons);
   if (!Number.isInteger(lessons) || lessons < 1 || lessons > 1000) e.lessons = 'Informe um número inteiro de 1 a 1000.';
   const rating = num(v.rating);
   if (!Number.isFinite(rating) || rating < 0 || rating > 5) e.rating = 'Informe uma nota de 0 a 5.';
-  const students = num(v.students);
+  const students = int(v.students);
   if (!Number.isInteger(students) || students < 0 || students > 10_000_000) e.students = 'Informe um número inteiro de 0 a 10.000.000.';
   if (v.price.trim() !== '') {
-    const price = num(v.price);
+    const price = int(v.price);
     if (!Number.isInteger(price) || price < 0 || price > 99_999) e.price = 'Informe um valor inteiro em reais (0 a 99.999) ou deixe em branco para gratuito.';
   }
   if (!instructors.some((i) => i.id === v.instructorId)) e.instructorId = 'Escolha uma instrutoria.';
@@ -68,11 +77,11 @@ export function validateCourseForm(v: CourseFormValues, others: Course[]): Cours
 }
 
 export function toCourseInput(v: CourseFormValues): CourseInput {
-  const price = v.price.trim() === '' ? 0 : num(v.price);
+  const price = v.price.trim() === '' ? 0 : int(v.price);
   return {
     slug: v.slug.trim(), title: v.title.trim(), summary: v.summary.trim(), category: v.category as Course['category'],
-    level: v.level as Level, hours: num(v.hours), lessons: num(v.lessons), rating: Math.round(num(v.rating) * 10) / 10,
-    students: num(v.students), ...(price > 0 ? { price } : {}), instructorId: v.instructorId, tags: parseTags(v.tags),
+    level: v.level as Level, hours: int(v.hours), lessons: int(v.lessons), rating: Math.round(num(v.rating) * 10) / 10,
+    students: int(v.students), ...(price > 0 ? { price } : {}), instructorId: v.instructorId, tags: parseTags(v.tags),
     ...(v.featured ? { featured: true } : {}),
   };
 }

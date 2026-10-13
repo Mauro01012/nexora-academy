@@ -3,7 +3,10 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "NEXORA ACADEMY — plataforma demonstrativa de cursos online (etapa 1/4).",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "description": "NEXORA ACADEMY — plataforma demonstrativa de cursos online (front-end apenas, sem backend).",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

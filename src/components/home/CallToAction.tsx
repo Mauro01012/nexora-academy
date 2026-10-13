@@ -1,9 +1,11 @@
+import { useAuth } from '@/hooks/useAuth';
 import { useBrand } from '@/hooks/useBrand';
 import { ButtonAnchor, ButtonLink } from '@/components/ui/Button';
 import { Reveal } from '@/hooks/useReveal';
 
 export function CallToAction() {
   const brand = useBrand();
+  const { isAuthenticated } = useAuth();
   return (
     <section className="cta-section surface-light" aria-labelledby="cta-title">
       <div className="container">
@@ -20,14 +22,21 @@ export function CallToAction() {
                 O próximo passo da sua carreira começa com uma trilha.
               </h2>
               <p className="cta__text">
-                Crie sua conta demonstrativa e conheça a experiência do aluno, ou fale com a equipe para adaptar a
-                plataforma ao seu projeto.
+                {isAuthenticated
+                  ? 'Continue de onde parou na sua área do aluno, ou fale com a equipe para adaptar a plataforma ao seu projeto.'
+                  : 'Crie sua conta demonstrativa e conheça a experiência do aluno, ou fale com a equipe para adaptar a plataforma ao seu projeto.'}
               </p>
             </div>
             <div className="cta__actions">
-              <ButtonLink route="signup" variant="accent" size="lg" arrow>
-                Criar conta
-              </ButtonLink>
+              {isAuthenticated ? (
+                <ButtonLink route="student" variant="accent" size="lg" arrow>
+                  Ir para a área do aluno
+                </ButtonLink>
+              ) : (
+                <ButtonLink route="signup" variant="accent" size="lg" arrow>
+                  Criar conta
+                </ButtonLink>
+              )}
               <ButtonAnchor href={`mailto:${brand.contact.email}`} variant="secondary" size="lg" icon="mail">
                 Falar com a equipe
               </ButtonAnchor>

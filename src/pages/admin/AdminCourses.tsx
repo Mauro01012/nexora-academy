@@ -3,6 +3,7 @@ import { AppLink } from '@/app/router';
 import { AdminShell } from '@/components/admin/AdminShell';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Flash } from '@/components/ui/Flash';
 import { categoryById } from '@/data/categories';
 import { useCourses } from '@/hooks/useCourses';
 import { deleteCourse, resetCourses } from '@/services/courseStore';
@@ -30,11 +31,7 @@ export function AdminCourses() {
       </div>
       <p className="admin__lead">Cursos de demonstração. As alterações aparecem no catálogo e nas páginas de detalhe e ficam só neste navegador.</p>
 
-      {flash ? (
-        <p className="admin-flash" role="status">
-          {flash}
-        </p>
-      ) : null}
+      {flash ? <Flash>{flash}</Flash> : null}
 
       <div className="admin-tools">
         <div className="field">
@@ -55,7 +52,7 @@ export function AdminCourses() {
       {shown.length === 0 ? (
         <p className="admin__muted">{courses.length === 0 ? 'O catálogo está vazio. Cadastre um curso ou restaure os iniciais.' : 'Nenhum curso corresponde ao filtro.'}</p>
       ) : (
-        <div className="admin-table-wrap">
+        <div className="admin-table-wrap" role="region" aria-label="Tabela de cursos (role para o lado se necessário)" tabIndex={0}>
           <table className="admin-table">
             <caption className="visually-hidden">Cursos de demonstração</caption>
             <thead>

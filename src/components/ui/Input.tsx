@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import type { InputHTMLAttributes } from 'react';
+import { Field, describedBy } from '@/components/ui/Field';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -7,34 +8,13 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-/** Campo de formulário acessível. Será usado nas telas de login e cadastro. */
+/** Campo de texto acessível: rótulo associado, dica e erro ligados por `aria-describedby`. */
 export function Input({ label, hint, error, id, className = '', ...rest }: InputProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
-  const hintId = hint ? `${inputId}-hint` : undefined;
-  const errorId = error ? `${inputId}-error` : undefined;
   return (
-    <div className={`field ${error ? 'field--error' : ''} ${className}`.trim()}>
-      <label className="field__label" htmlFor={inputId}>
-        {label}
-      </label>
-      <input
-        id={inputId}
-        className="input"
-        aria-invalid={error ? true : undefined}
-        aria-describedby={[hintId, errorId].filter(Boolean).join(' ') || undefined}
-        {...rest}
-      />
-      {hint ? (
-        <p id={hintId} className="field__hint">
-          {hint}
-        </p>
-      ) : null}
-      {error ? (
-        <p id={errorId} className="field__error" role="alert">
-          {error}
-        </p>
-      ) : null}
-    </div>
+    <Field id={inputId} label={label} hint={hint} error={error} className={className}>
+      <input id={inputId} className="input" aria-invalid={error ? true : undefined} aria-describedby={describedBy(inputId, hint, error)} {...rest} />
+    </Field>
   );
 }

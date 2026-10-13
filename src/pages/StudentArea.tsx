@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { RequireAuth } from '@/components/auth/RequireAuth';
 import { CourseCard } from '@/components/courses/CourseCard';
 import { Badge } from '@/components/ui/Badge';
 import { Button, ButtonLink } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { CourseCover } from '@/components/ui/CourseCover';
+import { Flash } from '@/components/ui/Flash';
 import { Icon } from '@/components/ui/Icon';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { AppLink } from '@/app/router';
@@ -13,12 +16,15 @@ import { useAuth } from '@/hooks/useAuth';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { coverPatternFor, formatNumber } from '@/utils/course';
 import { progressOf } from '@/utils/progress';
+import type { Course } from '@/types';
 
 const dateFormat = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' });
 
 function StudentContent() {
   const { user, unenroll, advanceLesson } = useAuth();
   const courses = useCourses();
+  const [toCancel, setToCancel] = useState<Course | null>(null);
+  const [flash, setFlash] = useState<string | null>(null);
   if (!user) return null;
 
   const items = user.enrollments.flatMap((enrollment) => {
@@ -95,6 +101,8 @@ function StudentContent() {
               </li>
             </ul>
 
+            {flash ? <Flash>{flash}</Flash> : null}
+
             <h2 className="display student__heading">Meus cursos</h2>
             {items.length === 0 ? (
               <div className="catalog-empty">
@@ -129,13 +137,13 @@ function StudentContent() {
                           </p>
                           <div className="enrolled__actions">
                             <ButtonLink to={`/cursos/${course.slug}`} variant="secondary">
-                              Ver curso
+                              Ver curso<span className="visually-hidden"> {course.title}</span>
                             </ButtonLink>
                             <Button variant="ghost" disabled={progress.complete} onClick={() => advanceLesson(course.id)}>
-                              Simular aula concluída
+                              Simular aula concluída<span className="visually-hidden"> em {course.title}</span>
                             </Button>
-                            <Button variant="ghost" onClick={() => unenroll(course.id)}>
-                              Cancelar inscrição
+                            <Button variant="ghost" className="btn--text-danger" onClick={() => setToCancel(course)}>
+                              Cancelar inscrição<span className="visually-hidden"> em {course.title}</span>
                             </Button>
                           </div>
                         </div>
@@ -160,6 +168,26 @@ function StudentContent() {
             </ul>
           </div>
         ) : null}
+
+        <ConfirmDialog
+          open={toCancel !== null}
+          title="Cancelar esta inscrição?"
+          confirmLabel="Cancelar inscrição"
+          cancelLabel="Manter inscrição"
+          onCancel={() => setToCancel(null)}
+          onConfirm={() => {
+            if (toCancel) {
+              unenroll(toCancel.id);
+              setFlash(`Inscrição em “${toCancel.title}” cancelada. O progresso desse curso foi descartado.`);
+            }
+            setToCancel(null);
+          }}
+        >
+          <p>
+            Você deixa de acompanhar “{toCancel?.title}” e o progresso registrado é descartado. Dá para se inscrever de novo depois, mas o curso
+            recomeça do zero.
+          </p>
+        </ConfirmDialog>
 
         <div className="container">
           <p className="demo-note">

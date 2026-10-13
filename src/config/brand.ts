@@ -40,6 +40,9 @@ export const brand = {
     'mint-400': '#4FD1A1',
     'mint-600': '#0F7A59',
     'amber-400': '#F2B84B',
+    // Estado de erro: independe da cor de destaque da marca e mantém contraste mínimo de 4,5:1
+    'danger-600': '#B42318',
+    'danger-400': '#FF9C8F',
   },
 
   fonts: {

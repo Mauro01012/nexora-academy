@@ -118,7 +118,7 @@ export function Signup() {
           <label htmlFor="signup-ack">Entendo que é uma demonstração, sem conta real nem segurança de produção.</label>
         </div>
         {errors.ack ? (
-          <p id="signup-ack-error" className="field__error" role="alert">
+          <p id="signup-ack-error" className="field__error">
             {errors.ack}
           </p>
         ) : null}

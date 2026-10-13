@@ -20,6 +20,11 @@
 .btn--block { width: 100%; }
 .btn:active { transform: translateY(1px); }
 .btn[disabled], .btn[aria-disabled='true'] { opacity: 0.5; pointer-events: none; }
+/* Rótulos ficam em uma linha; só quebram quando o espaço útil equivale a menos de 320px com a fonte padrão
+   (ex.: fonte do navegador muito ampliada), em vez de estourar a tela. */
+@media (max-width: 19.9375em) {
+  .btn { max-width: 100%; padding-block: var(--space-2); line-height: 1.2; text-align: center; white-space: normal; }
+}
 
 .btn__arrow { transition: transform var(--dur) var(--ease); }
 .btn:hover .btn__arrow { transform: translateX(4px); }
@@ -36,6 +41,11 @@
 .btn--ghost { background: transparent; color: var(--text); }
 .btn--ghost:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
 
+/* Ações destrutivas (excluir, cancelar inscrição). A cor vem do token --danger, que mantém contraste mínimo de 4,5:1. */
+.btn--danger { background: var(--danger); color: #fff; }
+.btn--danger:hover { background: color-mix(in srgb, var(--danger) 82%, black); box-shadow: var(--shadow-md); }
+.btn--text-danger { color: var(--danger); }
+
 /* ---------- Campos de formulário ---------- */
 .field { display: grid; gap: var(--space-2); }
 .field__label { font-size: var(--text-sm); font-weight: 600; color: var(--text); }
@@ -50,16 +60,20 @@
   border-radius: var(--radius-md);
   transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
 }
-.input::placeholder { color: color-mix(in srgb, var(--text-muted) 75%, transparent); }
+.input::placeholder { color: color-mix(in srgb, var(--text-muted) 88%, transparent); }
 .input:hover { border-color: var(--text-muted); }
 .input:focus-visible {
   outline: none;
   border-color: var(--color-primary-500);
   box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary-500) 25%, transparent);
 }
-.field--error .input { border-color: var(--color-accent-600); }
+.field { min-width: 0; }
+.field--error .input { border-color: var(--danger); }
 .field__hint { font-size: var(--text-xs); color: var(--text-muted); }
-.field__error { font-size: var(--text-xs); font-weight: 600; color: var(--color-accent-600); }
+.field__error { font-size: var(--text-xs); font-weight: 600; color: var(--danger); }
+
+/* ---------- Confirmação após uma ação ---------- */
+.flash { padding: var(--space-3) var(--space-4); font-weight: 600; font-size: var(--text-sm); color: var(--color-mint-600); background: color-mix(in srgb, var(--color-mint-600) 10%, white); border: 1px solid var(--color-mint-600); border-radius: var(--radius-md); }
 
 /* ---------- Cards ---------- */
 .card {
